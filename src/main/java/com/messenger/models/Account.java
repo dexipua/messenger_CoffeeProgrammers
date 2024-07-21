@@ -45,11 +45,11 @@ public class Account implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "accounts_contact",
+            name = "account_contact",
             joinColumns = @JoinColumn(name = "my_account_id"),
             inverseJoinColumns = @JoinColumn(name = "account_id")
     )
-    private List<Account> accounts = new ArrayList<>();
+    private List<Account> contacts = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(

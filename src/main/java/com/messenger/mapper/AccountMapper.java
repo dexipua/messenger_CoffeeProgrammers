@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "accountMapper")
 public interface AccountMapper {
-    Account toMadel(AccountRequest accountRequest);
+    Account toModel(AccountRequest accountRequest);
     AccountResponse toResponse(Account account);
     AccountResponseSimple toResponseSimple(Account account);
 }
