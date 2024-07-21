@@ -2,9 +2,7 @@ package com.messenger.models;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -12,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 class ChatTest {
 
     @Test
-    void testEquals() { //todo 100%
+    void testEquals() {
         // given
         Chat chat1 = new Chat(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));
         Chat chat2 = new Chat(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));

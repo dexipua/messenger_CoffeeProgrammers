@@ -55,6 +55,6 @@ class ChatRepositoryTest {
 
         // then
         assertThat(foundChats).hasSize(2);
-        //assertThat(foundChats).containsExactlyInAnyOrder(chat1, chat2);
+        assertThat(foundChats).containsExactlyInAnyOrder(chat1, chat2);
     }
 }

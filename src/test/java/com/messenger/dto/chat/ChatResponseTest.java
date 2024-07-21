@@ -1,7 +1,6 @@
 package com.messenger.dto.chat;
 
 import com.messenger.models.Account;
-import com.messenger.models.Chat;
 import com.messenger.models.Message;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +33,7 @@ class ChatResponseTest {
     }
 
     @Test
-    void testEquals() { //todo 100%
+    void testEquals() {
         // given
         List<Message> messages1 = Arrays.asList(new Message());
         List<Account> accounts1 = Arrays.asList(new Account());
@@ -54,7 +53,7 @@ class ChatResponseTest {
     }
 
     @Test
-    void testHashCode() { // todo 100%
+    void testHashCode() {
         // given
         ChatResponse chatResponse1 = new ChatResponse(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));
         ChatResponse chatResponse2 = new ChatResponse(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));
