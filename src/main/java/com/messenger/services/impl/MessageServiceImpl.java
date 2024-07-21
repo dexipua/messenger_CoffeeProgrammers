@@ -36,7 +36,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message update(Long chatId, Message message) {
+    public Message update(Message message) {
         Message messageToUpdate = findById(message.getId());
         messageToUpdate.setText(message.getText());
         return messageRepository.save(messageToUpdate);
