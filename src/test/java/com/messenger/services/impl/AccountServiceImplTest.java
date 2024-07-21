@@ -67,35 +67,35 @@ class AccountServiceImplTest {
     }
 
     @Test
-    public void loadUserByUsername() {
+    void loadUserByUsername() {
         when(accountRepository.findByEmail(account.getEmail())).thenReturn(Optional.of(account));
         assertEquals(account, accountService.loadUserByUsername(account.getEmail()));
         verify(accountRepository, times(1)).findByEmail(account.getEmail());
     }
 
     @Test
-    public void notLoadUserByUsername() {
+    void notLoadUserByUsername() {
         when(accountRepository.findByEmail(account.getEmail())).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> accountService.loadUserByUsername(account.getEmail()));
         verify(accountRepository, times(1)).findByEmail(account.getEmail());
     }
 
     @Test
-    public void getAll() {
+    void getAll() {
         when(accountRepository.findAll()).thenReturn(List.of(account));
         assertEquals(List.of(account), accountService.getAll());
         verify(accountRepository, times(1)).findAll();
     }
 
     @Test
-    public void findById() {
+    void findById() {
         when(accountRepository.findById(account.getId())).thenReturn(Optional.of(account));
         assertEquals(account, accountService.findById(account.getId()));
         verify(accountRepository, times(1)).findById(account.getId());
     }
 
     @Test
-    public void notFindById() {
+    void notFindById() {
         when(accountRepository.findById(account.getId())).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> accountService.findById(account.getId()));
         verify(accountRepository, times(1)).findById(account.getId());
