@@ -2,7 +2,6 @@ package com.messenger.controlers;
 
 import com.messenger.dto.chat.ChatResponse;
 import com.messenger.mapper.ChatMapper;
-import com.messenger.models.Chat;
 import com.messenger.services.interfaces.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,8 +37,9 @@ public class ChatController {
 
     @GetMapping("/findByAccountId/{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Chat> findByAccountId(@PathVariable Long accountId){
-        return chatService.findByAccountId(accountId);
+    public List<ChatResponse> findByAccountId(@PathVariable Long accountId){
+        return chatService.findByAccountId(accountId).stream()
+                .map(chatMapper::toResponse).toList();
     }
 
 }
