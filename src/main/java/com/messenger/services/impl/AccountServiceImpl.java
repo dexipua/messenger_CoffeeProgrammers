@@ -1,7 +1,5 @@
 package com.messenger.services.impl;
 
-import com.messenger.dto.account.AccountResponseSimple;
-import com.messenger.mapper.AccountMapper;
 import com.messenger.models.Account;
 import com.messenger.repository.AccountRepository;
 import com.messenger.services.interfaces.AccountService;
@@ -22,7 +20,6 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AccountMapper accountMapper;
 
     @Override
     public Account create(Account account) {
@@ -40,9 +37,8 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public List<AccountResponseSimple> getAll() {
-        return accountRepository.findAll().stream()
-                .map(accountMapper::toResponseSimple).toList();
+    public List<Account> getAll() {
+        return accountRepository.findAll();
     }
 
     @Override
