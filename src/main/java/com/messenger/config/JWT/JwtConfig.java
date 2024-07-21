@@ -12,11 +12,12 @@ import java.util.Date;
 
 @Slf4j
 @Component
-public class JwtUtils {
+public class JwtConfig {
 
-    @Value("${jwtToken.app.jwtSecret}")
+    @Value("${jwt.secret}")
     private String jwtSecret;
-    @Value("${jwtToken.app.jwtExpirationMs}")
+
+    @Value("${jwt.expiration}")
     private int jwtExpirationMs;
 
     public String generateTokenFromUsername(String username) {
@@ -26,6 +27,10 @@ public class JwtUtils {
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS256, getSignInKey())
                 .compact();
+    }
+
+    public String getUserNameFromJwtToken(String token) {
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
@@ -46,22 +51,9 @@ public class JwtUtils {
         return false;
     }
 
-    public String getSubject(String token) {
-        return parseClaims(token).getSubject();
-    }
-
-    private Claims parseClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
     private Key getSignInKey() {
         byte[] keyBytes = Base64.getDecoder().decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
-
 

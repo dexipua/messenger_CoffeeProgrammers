@@ -24,7 +24,7 @@ public class AuthController {
 
     private final AccountService accountService;
     private final AuthenticationManager authenticationManager;
-    private final JwtUtils jwtUtils;
+    private final JwtConfig jwtUtils;
 
     @PostMapping("/auth/login")
     public AuthResponseDTO login(@RequestBody @Valid LoginRequestDTO loginRequest) {
