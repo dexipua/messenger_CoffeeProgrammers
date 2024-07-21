@@ -28,6 +28,12 @@ class MessageRepositoryTest {
     @Autowired
     private AccountRepository accountRepository;
 
+    private Chat chat;
+    private Chat chat2;
+    private Message message;
+    private Account account1;
+    private Account account2;
+
     @AfterEach
     void tearDown() {
         messageRepository.deleteAll();
@@ -35,16 +41,16 @@ class MessageRepositoryTest {
         accountRepository.deleteAll();
     }
 
-    Chat chat;
-    Chat chat2;
-    Message message;
-    Account account1;
-    Account account2;
-
     @BeforeEach
     void setUp() {
-        account1 = Instancio.of(Account.class).ignore(field(Account.class, "chats")).ignore(field(Account.class, "accounts")).create();
-        account2 = Instancio.of(Account.class).ignore(field(Account.class, "chats")).ignore(field(Account.class, "accounts")).create();
+        account1 = Instancio.of(Account.class)
+                .ignore(field(Account.class, "chats"))
+                .ignore(field(Account.class, "accounts"))
+                .create();
+        account2 = Instancio.of(Account.class)
+                .ignore(field(Account.class, "chats"))
+                .ignore(field(Account.class, "accounts"))
+                .create();
         account1 = accountRepository.save(account1);
         account2 = accountRepository.save(account2);
 
