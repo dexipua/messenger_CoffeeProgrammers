@@ -28,8 +28,6 @@ class ChatTest {
     @Test
     void testHashCode() {
         // given
-        List<Message> list = new ArrayList<>();
-
         Chat chat1 = new Chat(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));
         Chat chat2 = new Chat(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));
 
