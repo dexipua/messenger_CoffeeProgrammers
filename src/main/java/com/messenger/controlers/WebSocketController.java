@@ -38,6 +38,7 @@ public class WebSocketController {
         }
     }
 
+    //TODO
 //    // Метод для отримання історії повідомлень
 //    @MessageMapping("/history")
 //    public void getHistory(Long chatId, Principal principal) {
