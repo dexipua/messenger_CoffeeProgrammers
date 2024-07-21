@@ -1,16 +1,14 @@
 package com.messenger.controlers;
 
-import com.messenger.dto.message.MessageRequest;
 import com.messenger.mapper.MessageMapper;
-import com.messenger.models.Account;
-import com.messenger.models.Chat;
-import com.messenger.models.Message;
 import com.messenger.services.interfaces.MessageService;
+import com.messenger.testWebSocket.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,26 +17,20 @@ public class WebSocketController {
     private final MessageMapper messageMapper;
     private final SimpMessagingTemplate messagingTemplate;
 
-    @MessageMapping("/private/chat/{chat_id}/account/{account_id}")
-    public void sendPrivateMessage(MessageRequest messageRequest,
-                                   @PathVariable("chat_id") long chatId,
-                                   @PathVariable("account_id") long accountId)
-            throws Exception {
-        Message savedMessage = messageService.create(chatId, accountId,
-                messageMapper.toModel(messageRequest));
-        Chat chat = savedMessage.getChat();
-        for (Account account : chat.getAccounts()) {
-            if (!account.getId().equals(savedMessage.getAccount().getId())) {
-                messagingTemplate.convertAndSendToUser(
-                        account.getId().toString(),
-                        "/queue/messages",
-                        savedMessage
-                );
-            }
-        }
+    @MessageMapping("/message")
+    @SendTo("/chatroom/public")
+    public Message receiveMessage(@Payload Message message){
+        return message;
     }
 
-    //TODO
+    @MessageMapping("/private-message")
+    public Message recMessage(@Payload Message message){
+        messagingTemplate.convertAndSendToUser(message.getReceiverName(),"/private",message);
+        System.out.println(message.toString());
+        return message;
+    }
+
+    //TODO history for chats and messages
 //    // Метод для отримання історії повідомлень
 //    @MessageMapping("/history")
 //    public void getHistory(Long chatId, Principal principal) {
@@ -52,5 +44,25 @@ public class WebSocketController {
 //                "/queue/history",
 //                messages
 //        );
+//    }
+    //    @MessageMapping("/private-message/{chat_id}/myId/{my_account_id}")
+//    public MessageResponse sendPrivateMessage(MessageRequest messageRequest,
+//                                              @PathVariable("chat_id") long chatId,
+//                                              @PathVariable("my_account_id") long accountId)
+//            throws Exception {
+//        Message savedMessage = messageService.create(chatId, accountId,
+//                messageMapper.toModel(messageRequest));
+//        Chat chat = savedMessage.getChat();
+//        for (Account account : chat.getAccounts()) {
+//            if (!account.getId().equals(savedMessage.getAccount().getId())) {
+//                messagingTemplate.convertAndSendToUser(
+//                        account.getId().toString(),
+//                        "/private",
+//                        savedMessage
+//                );
+//            }
+//        }
+//        System.out.println(messageMapper.toResponse(savedMessage));
+//        return messageMapper.toResponse(savedMessage);
 //    }
 }
