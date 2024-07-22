@@ -27,9 +27,10 @@ public class AuthController {
     private final EmailService emailService;
 
     @PostMapping("/login")
-    public void login(@RequestBody StringRequestDTO loginRequest) {
+    public boolean login(@RequestBody StringRequestDTO loginRequest) {
         if(accountService.isExistByEmail(loginRequest.getMessage())) {
-            emailService.sendEmail(loginRequest.getMessage());
+            //emailService.sendEmail(loginRequest.getMessage());
+            return true;
         }else{
             throw new UnsupportedOperationException(
                     "Cannot find account with email " + loginRequest.getMessage());
@@ -37,12 +38,13 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public void registration(@RequestBody StringRequestDTO email) {
+    public boolean registration(@RequestBody StringRequestDTO email) {
         if(!(accountService.isExistByEmail(email.getMessage()))) {
-            emailService.sendEmail(email.getMessage());
+            //emailService.sendEmail(email.getMessage());
+            return true;
         }else{
             throw new UnsupportedOperationException(
-                    "Cannot find account with email " + email.getMessage());
+                    "Find account with email " + email.getMessage());
         }
     }
 
@@ -55,9 +57,9 @@ public class AuthController {
     @PostMapping("/verification/logging")
     @ResponseStatus(HttpStatus.OK)
     public AuthResponseDTO verificationEmailLog(
-            @RequestBody StringRequestDTO code,
+            @RequestParam("code") String code,
             @RequestBody @Valid LoginRequestDTO loginRequest) {
-        emailService.verification(code.getMessage());
+        emailService.verification(code);
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
@@ -73,13 +75,12 @@ public class AuthController {
     @PostMapping("/verification/regis")
     @ResponseStatus(HttpStatus.OK)
     public AuthResponseDTO verificationEmailRegis(
-            @RequestBody StringRequestDTO code,
+            @RequestParam("code") String code,
             @RequestBody @Valid RegistrationRequestDTO registrationRequest) {
-        emailService.verification(code.getMessage());
+        emailService.verification(code);
         Account user = accountService.create(new Account(
                 registrationRequest.getPassword(),
                 registrationRequest.getUsername(),
-                registrationRequest.getRole(),
                 registrationRequest.getFirstName(),
                 registrationRequest.getLastName(),
                 registrationRequest.getDescription()));

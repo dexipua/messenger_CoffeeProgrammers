@@ -2,33 +2,34 @@ import React, {useState} from "react";
 import Typography from "@mui/material/Typography";
 import {Box, Button, Paper, TextField} from "@mui/material";
 import Cookies from 'js-cookie';
-import {useNavigate} from "react-router-dom";
 
-const Login = () => {
-    const [email, setEmail] = useState('');
-    const navigate = useNavigate();
+const LoginVerification = () => {
+    const email = Cookies.get('email');
+    const [password, setPassword] = useState('');
+    const [code, setCode] = useState('')
+
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(false)
+
+    const [error, setError] = useState(null)
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
         try {
-            const response = await fetch('http://localhost:8080/api/login', {
+            const response =
+                await fetch('http://localhost:8080/api/verification/logging?code='+code, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({message: email}),
+                body: JSON.stringify({username: email, password}),
             });
             if (!response) {
                 throw new Error('Network response was not ok');
             }
+            Cookies.set(response);
             const data = await response.json();
             console.log('Login successful:', data);
-            if(response.status === 200) {
-                Cookies.set('email', email, {expires: 1});
-                navigate('/loginVer');
-            }
         } catch (error) {
             setError(error.message);
         } finally {
@@ -65,12 +66,23 @@ const Login = () => {
                     alignItems="center"
                     sx={{mt: 1}}
                 >
+                    <Typography component="h3">{email}</Typography>
                     <TextField
-                        label="Email"
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        label="Password"
+                        type="password"
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        fullWidth
+                        margin="normal"
+                    />
+                    <TextField
+                        label="Code"
+                        type="text"
+                        id="code"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
                         required
                         fullWidth
                         margin="normal"
@@ -84,4 +96,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default LoginVerification;

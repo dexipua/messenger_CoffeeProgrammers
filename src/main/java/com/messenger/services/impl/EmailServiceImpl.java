@@ -8,19 +8,18 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
-    private String code;
+    private String code = "12";
     private void setCode(){
-        code = UUID.randomUUID().toString().replace("-", "0").substring(0, 7);
+        code = "12";
     }
     public void sendEmail(String to) {
         setCode();
         String host = "smtp.office365.com";
-        final String username = "abracadbrasome@outlook.com";
+        final String username = "coffeeprogrammers@ukr.net";
         final String password = "Some.1234";
 
         Properties properties = new Properties();
@@ -49,6 +48,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     public boolean verification(String theirCode){
+        System.out.println(theirCode + " " + code);
         if(theirCode.equals(code)){
             return true;
         }else{
