@@ -3,12 +3,9 @@ package com.messenger.config;
 import com.messenger.config.JWT.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.Message;
-import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.messaging.access.intercept.MessageMatcherDelegatingAuthorizationManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -23,26 +20,17 @@ public class WebSocketSecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/api/auth/login").permitAll()
+                                .requestMatchers("/api/auth/registration").permitAll()
                                 .requestMatchers("/ws/**").permitAll()
                                 .anyRequest().authenticated()
                 )
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//                        .maximumSessions(1)
+//                )
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    @Bean
-    public MessageMatcherDelegatingAuthorizationManager.Builder messageAuthorizationManagerBuilder() {
-        return MessageMatcherDelegatingAuthorizationManager.builder();
-    }
-
-    @Bean
-    public AuthorizationManager<Message<?>> messageAuthorizationManager(
-            MessageMatcherDelegatingAuthorizationManager.Builder messages) {
-        messages
-                .simpDestMatchers("/user/**").hasRole("USER")
-                .anyMessage().authenticated();
-        return messages.build();
     }
 
     @Bean
