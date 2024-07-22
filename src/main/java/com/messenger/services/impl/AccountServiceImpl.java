@@ -25,7 +25,8 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     @Override
     public Account create(Account account) {
         if (accountRepository.findByEmail(account.getEmail()).isPresent()) {
-            throw new EntityExistsException("User with email " + account.getEmail() + " already exists");
+            throw new EntityExistsException("User with email " +
+                    account.getEmail() + " already exists");
         }
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         return accountRepository.save(account);
@@ -61,5 +62,15 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         old.setFirstName(account.getFirstName());
         old.setLastName(account.getLastName());
         return accountRepository.save(old);
+    }
+
+    @Override
+    public List<Account> findByNames(String lastName, String firstName) {
+        return accountRepository.findAllByLastNameContainsAndFirstNameContains(lastName, firstName);
+    }
+
+    @Override
+    public List<Account> findByEmail(String email) {
+        return accountRepository.findByEmailContains(email);
     }
 }

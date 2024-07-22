@@ -43,4 +43,19 @@ public class AccountController {
         return accountMapper.toResponse(accountService.update(
                 accountMapper.toModel(accountRequest), id));
     }
+
+    @GetMapping("/getAllByName")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AccountResponseSimple> getAllByName(@RequestParam String lastName,
+                                                    @RequestParam String firstName){
+        return accountService.findByNames(lastName, firstName).stream()
+                .map(accountMapper::toResponseSimple).toList();
+    }
+
+    @GetMapping("/getAllByEmail")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AccountResponseSimple> getAllByEmail(@RequestParam String email){
+        return accountService.findByEmail(email).stream()
+                .map(accountMapper::toResponseSimple).toList();
+    }
 }

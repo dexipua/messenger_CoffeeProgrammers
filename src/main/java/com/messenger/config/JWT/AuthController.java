@@ -51,7 +51,8 @@ public class AuthController {
     }
 
     @GetMapping("/check")
-    public boolean checkTokenValid(String token) {
-        return jwtUtils.validateJwtToken(token);
+    public boolean checkTokenValid(@RequestBody String token) {
+        System.out.println(token);
+        return jwtUtils.validateJwtToken(token.substring(1));
     }
 }

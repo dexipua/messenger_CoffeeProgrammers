@@ -10,4 +10,6 @@ public interface AccountService {
     Account findById(long id);
     List<Account> findAllContacts(long id);
     Account update(Account account, long id);
+    List<Account> findByNames(String lastName, String firstName);
+    List<Account> findByEmail(String email);
 }
