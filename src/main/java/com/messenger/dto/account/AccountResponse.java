@@ -1,5 +1,6 @@
 package com.messenger.dto.account;
 
+import com.messenger.dto.chat.ChatResponse;
 import com.messenger.models.Role;
 import lombok.Data;
 
@@ -16,5 +17,5 @@ public class AccountResponse {
     private String description;
     private String status;
     private List<AccountResponseSimple> accounts = new ArrayList<>();
-    //private List<ChatResponse> chats = new ArrayList<>();
+    private List<ChatResponse> chats = new ArrayList<>();
 }

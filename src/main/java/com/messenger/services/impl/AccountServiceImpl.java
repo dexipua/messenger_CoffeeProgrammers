@@ -73,4 +73,9 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     public List<Account> findByEmail(String email) {
         return accountRepository.findByEmailContains(email);
     }
+
+    @Override
+    public boolean isExistByEmail(String email) {
+        return accountRepository.existsByEmail(email);
+    }
 }
