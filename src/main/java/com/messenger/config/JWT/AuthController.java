@@ -7,6 +7,7 @@ import com.messenger.dto.auth.RegistrationRequestDTO;
 import com.messenger.models.Account;
 import com.messenger.services.interfaces.AccountService;
 import com.messenger.services.interfaces.EmailService;
+import com.messenger.services.interfaces.VerificationCodeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtConfig jwtUtils;
     private final EmailService emailService;
+    private final VerificationCodeService verificationCodeService;
 
     @PostMapping("/login")
     public void login(@RequestBody StringRequestDTO loginRequest) {
@@ -57,7 +59,7 @@ public class AuthController {
     public AuthResponseDTO verificationEmailLog(
             @RequestBody StringRequestDTO code,
             @RequestBody @Valid LoginRequestDTO loginRequest) {
-        emailService.verification(code.getMessage());
+        verificationCodeService.verification(loginRequest.getUsername(), code.getMessage());
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
@@ -75,7 +77,7 @@ public class AuthController {
     public AuthResponseDTO verificationEmailRegis(
             @RequestBody StringRequestDTO code,
             @RequestBody @Valid RegistrationRequestDTO registrationRequest) {
-        emailService.verification(code.getMessage());
+        verificationCodeService.verification(registrationRequest.getUsername(), code.getMessage());
         Account user = accountService.create(new Account(
                 registrationRequest.getPassword(),
                 registrationRequest.getUsername(),

@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 public class EmailController {
     private final EmailService emailService;
 
-
-
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public void sendEmailTo(@RequestBody String email) {
