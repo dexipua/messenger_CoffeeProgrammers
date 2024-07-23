@@ -14,12 +14,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatController {
     private final ChatService chatService;
-
     private final ChatMapper chatMapper;
 
     @PostMapping("/create/{first_account_id}/{second_account_id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ChatResponse create(@PathVariable("first_account_id") Long firstAccountId, @PathVariable("second_account_id") Long secondAccountId) {
+    public ChatResponse create(@PathVariable("first_account_id") Long firstAccountId,
+                               @PathVariable("second_account_id") Long secondAccountId) {
         return chatMapper.toResponse(chatService.create(firstAccountId, secondAccountId));
     }
 

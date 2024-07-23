@@ -15,9 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
     public final ChatRepository chatRepository;
-
     public final ChatMapper chatMapper;
-
     public final AccountService accountService;
 
 
@@ -37,8 +35,8 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public Chat findById(Long chatId) {
-        return chatRepository.findById(chatId)
-                .orElseThrow(() -> new EntityNotFoundException("Chat with id " + chatId + "not found"));
+        return chatRepository.findById(chatId).orElseThrow(
+                () -> new EntityNotFoundException("Chat with id " + chatId + "not found"));
 
     }
 

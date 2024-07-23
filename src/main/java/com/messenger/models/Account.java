@@ -40,8 +40,8 @@ public class Account implements UserDetails {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "status")
-    private String status;
+    @Column(name = "status", nullable = false)
+    private Status status;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -68,6 +68,7 @@ public class Account implements UserDetails {
         this.firstName = firstName;
         this.lastName = lastName;
         this.description = description;
+        this.status = Status.OFFLINE;
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {

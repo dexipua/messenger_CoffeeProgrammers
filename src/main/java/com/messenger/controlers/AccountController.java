@@ -23,11 +23,11 @@ public class AccountController {
     @GetMapping("/getAll")
     @ResponseStatus(HttpStatus.OK)
     public List<AccountResponseSimple> getAll(){
-        return accountService.getAll().stream()
+        return accountService.findAll().stream()
                 .map(accountMapper::toResponseSimple).toList();
     }
 
-    @GetMapping("/getAllAccounts/{my_id}")
+    @GetMapping("/getAllContacts/{my_id}")
     @ResponseStatus(HttpStatus.OK)
     public List<AccountResponseSimple> getAllContacts(
             @PathVariable("my_id") long myId){
@@ -49,13 +49,6 @@ public class AccountController {
     public List<AccountResponseSimple> getAllByName(@RequestParam String lastName,
                                                     @RequestParam String firstName){
         return accountService.findByNames(lastName, firstName).stream()
-                .map(accountMapper::toResponseSimple).toList();
-    }
-
-    @GetMapping("/getAllByEmail")
-    @ResponseStatus(HttpStatus.OK)
-    public List<AccountResponseSimple> getAllByEmail(@RequestParam String email){
-        return accountService.findByEmail(email).stream()
                 .map(accountMapper::toResponseSimple).toList();
     }
 }

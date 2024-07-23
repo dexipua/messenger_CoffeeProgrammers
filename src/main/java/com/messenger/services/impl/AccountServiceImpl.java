@@ -39,7 +39,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public List<Account> getAll() {
+    public List<Account> findAll() {
         return accountRepository.findAll();
     }
 
@@ -67,11 +67,6 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     @Override
     public List<Account> findByNames(String lastName, String firstName) {
         return accountRepository.findAllByLastNameContainsAndFirstNameContains(lastName, firstName);
-    }
-
-    @Override
-    public List<Account> findByEmail(String email) {
-        return accountRepository.findByEmailContains(email);
     }
 
     @Override

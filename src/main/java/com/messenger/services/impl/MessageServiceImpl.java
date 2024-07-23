@@ -38,6 +38,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message findById(Long id) {
-        return messageRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Message with id " + id + " not found"));
+        return messageRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Message with id " + id + " not found"));
     }
 }
