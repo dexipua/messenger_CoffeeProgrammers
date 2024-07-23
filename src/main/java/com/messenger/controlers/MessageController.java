@@ -19,12 +19,15 @@ public class MessageController {
     @GetMapping("/getByChat/{chat_id}")
     @ResponseStatus(HttpStatus.OK)
     public List<MessageResponse> getMessagesByChatId(@PathVariable("chat_id") Long chatId) {
-        return messageService.getAllByChatId(chatId).stream().map(messageMapper::toResponse).toList();
+        return messageService.getAllByChatId(chatId).stream()
+                .map(messageMapper::toResponse).toList();
     }
 
     @GetMapping("getByChatAndText/{chat_id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<MessageResponse> getMessagesByChatIdAndTextContaining(@PathVariable("chat_id") Long chatId, @RequestParam String text) {
-        return messageService.getAllByChatIdAndTextContaining(chatId, text).stream().map(messageMapper::toResponse).toList();
+    public List<MessageResponse> getMessagesByChatIdAndTextContaining(
+            @PathVariable("chat_id") Long chatId, @RequestParam String text) {
+        return messageService.getAllByChatIdAndTextContaining(chatId, text)
+                .stream().map(messageMapper::toResponse).toList();
     }
 }

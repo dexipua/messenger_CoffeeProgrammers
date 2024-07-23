@@ -22,7 +22,7 @@ public class RegistrationRequestDTO {
 
     @NotBlank(message = "firstName can not be blank")
     @Pattern(regexp = "[A-Z][a-z]*",
-            message = "lastName must start with an uppercase letter followed by lowercase letters")
+            message = "firstName must start with an uppercase letter followed by lowercase letters")
     private String firstName;
 
     @NotBlank(message = "lastName can not be blank")
