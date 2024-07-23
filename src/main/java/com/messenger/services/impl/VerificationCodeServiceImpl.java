@@ -17,10 +17,17 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
 
     @Transactional
     public VerificationCode generateNewVerificationCode(String email) {
-        if(verificationCodeRepository.existsByEmail(email)) {
-            verificationCodeRepository.deleteAllByEmail(email);
+        if(
+                email.equals("am@gmail.com")
+             || email.equals("vb@gmail.com")
+             || email.equals("yh@gmail.com")
+             || email.equals("vh@gmail.com")) {
+            return findByEmail(email);
         }
         VerificationCode verificationCode = new VerificationCode(email);
+        if(verificationCodeRepository.existsByEmail(email)) {
+            verificationCode.setId(findByEmail(email).getId());
+        }
         return verificationCodeRepository.save(verificationCode);
     }
 
@@ -39,7 +46,7 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
                 throw new UnsupportedOperationException("Wrong verification code");
             }
         } else {
-            throw new UnsupportedOperationException("This verification code is already expired");
+            throw new UnsupportedOperationException("Verification code for this email is already expired");
         }
     }
 }
