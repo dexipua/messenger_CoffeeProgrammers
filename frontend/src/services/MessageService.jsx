@@ -30,7 +30,7 @@ class MessageService {
         }
     }
 
-    async getAllByChatId({chatId}) {
+    async getAllByChatId(chatId) {
         return await this.handleRequest(
             () => apiClient.get(`${API_URL}/getAllByChat/${chatId}`));
     }

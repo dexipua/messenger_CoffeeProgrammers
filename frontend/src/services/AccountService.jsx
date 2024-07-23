@@ -46,8 +46,8 @@ class AccountService {
             () => apiClient.get(`${API_URL}/getAllContacts/${userId}`));
     }
 
-    async getAllByName({firstName, lastName,
-                           page, size}) {
+    async getAllByName(firstName, lastName,
+                       page, size) {
         return await this.handleRequest(
             () =>
                 apiClient.get(`${API_URL}/getAllByName`, {
