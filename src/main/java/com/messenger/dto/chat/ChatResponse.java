@@ -10,5 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ChatResponse {
     private Long id;
+    private String name;
     private List<AccountResponseSimple> accounts;
 }
