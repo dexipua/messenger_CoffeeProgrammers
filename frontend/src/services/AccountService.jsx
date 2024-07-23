@@ -30,28 +30,40 @@ class AccountService {
         }
     }
 
-    async getAll() {
+    async getAll(page, size) {
         return await this.handleRequest(
-            () => apiClient.get(`${API_URL}/getAll`));
+            () => apiClient.get(`${API_URL}/getAll`, {
+                params: {
+                    page: page,
+                    size: size
+                }
+            }));
     }
 
     async getAllContacts() {
         const userId = Cookies.get('id');
         return await this.handleRequest(
-            () => apiClient.get(`${API_URL}/getAllContacts/${id}`));
+            () => apiClient.get(`${API_URL}/getAllContacts/${userId}`));
     }
 
-    async getAllByName({firstName, lastName}) {
-        const userId = Cookies.get('id');
+    async getAllByName({firstName, lastName,
+                           page, size}) {
         return await this.handleRequest(
             () =>
-                apiClient.get(`${API_URL}/getAllByName/?firstName=${firstName}&lastName=${lastName}`));
+                apiClient.get(`${API_URL}/getAllByName`, {
+                    params: {
+                        firstName: firstName,
+                        lastName: lastName,
+                        page: page,
+                        size: size
+                    }
+                }));
     }
 
     async update(firstName, lastName, description) {
         const userId = Cookies.get('id');
         return await this.handleRequest(
-            () => apiClient.post(`${API_URL}/update/${id}`,
+            () => apiClient.post(`${API_URL}/update/${userId}`,
                 {
                     param: {
                         firstName: firstName,

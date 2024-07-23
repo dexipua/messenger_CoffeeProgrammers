@@ -8,6 +8,9 @@ import com.messenger.services.interfaces.ContactService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -43,8 +46,13 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public List<Account> findAll() {
-        return accountRepository.findAll();
+    public Object[] findAll(int page, int size) {
+        Object[] objects = new Object[2];
+        Page<Account> pageR = accountRepository.findAll(PageRequest.of(page, size,
+                Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
+        objects[0] = pageR.toList();
+        objects[1] = pageR.getTotalPages();
+        return objects;
     }
 
     @Override
@@ -71,8 +79,14 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public List<Account> findByNames(String lastName, String firstName) {
-        return accountRepository.findAllByLastNameContainsAndFirstNameContains(lastName, firstName);
+    public Object[] findByNames(String lastName, String firstName, int page, int size) {
+        Object[] objects = new Object[2];
+        Page<Account> pageR = accountRepository.findAllByLastNameContainsAndFirstNameContains(
+                lastName, firstName, PageRequest.of(page, size,
+                        Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
+        objects[0] = pageR.toList();
+        objects[1] = pageR.getTotalPages();
+        return objects;
     }
 
     @Override
