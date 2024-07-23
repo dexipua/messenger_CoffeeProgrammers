@@ -48,7 +48,8 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<Chat> findChatsByAccountIds(List<Long> accountsIds){
-        return chatRepository.findChatsByAccountIds(accountsIds, accountsIds.size());
+    public Long findChatsByAccountIds(List<Long> accountsIds){
+        List<Chat> list = chatRepository.findChatsByAccountIds(accountsIds, accountsIds.size());
+        return list.size() == 1  ? list.getFirst().getId() : null;
     }
 }

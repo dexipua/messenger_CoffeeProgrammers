@@ -9,5 +9,5 @@ public interface ChatService {
     void delete(Long chatId);
     Chat findById(Long chatId);
     List<Chat> findByAccountId(Long accountId);
-    List<Chat> findChatsByAccountIds(List<Long> accountsIds);
+    Long findChatsByAccountIds(List<Long> accountsIds);
 }
