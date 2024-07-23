@@ -50,4 +50,9 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
             throw new UnsupportedOperationException("Verification code for this email is already expired");
         }
     }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return verificationCodeRepository.existsByEmail(email);
+    }
 }

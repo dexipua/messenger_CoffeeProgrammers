@@ -17,6 +17,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -31,6 +33,11 @@ public class AuthController {
     @PostMapping("/login")
     public boolean login(@RequestBody StringRequestDTO loginRequest) {
         if(accountService.isExistByEmail(loginRequest.getMessage())) {
+            if(verificationCodeService.existsByEmail(loginRequest.getMessage())) {
+                if(verificationCodeService.findByEmail(loginRequest.getMessage()).getExpiryDate().isAfter(LocalDateTime.now())) {
+                    throw new UnsupportedOperationException("Code for this email is not expired to send new");
+                }
+            }
             emailService.sendEmail(loginRequest.getMessage());
             return true;
         }else{
@@ -42,6 +49,11 @@ public class AuthController {
     @PostMapping("/registration")
     public boolean registration(@RequestBody StringRequestDTO email) {
         if(!(accountService.isExistByEmail(email.getMessage()))) {
+            if(verificationCodeService.existsByEmail(email.getMessage())) {
+                if(verificationCodeService.findByEmail(email.getMessage()).getExpiryDate().isAfter(LocalDateTime.now())) {
+                    throw new UnsupportedOperationException("Code for this email is not expired to send new");
+                }
+            }
             emailService.sendEmail(email.getMessage());
             return true;
         }else{
