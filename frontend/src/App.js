@@ -6,6 +6,7 @@ import Reg from "./pages/Reg";
 import RegVer from "./pages/RegVer";
 import Chat from "./components/common/Chat";
 import AllAccounts from "./pages/AllAccounts";
+import AccountPage from "./pages/AccountPage";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                 <Route exact path={'/reg'} element={<Reg/>}/>
                 <Route exact path={'/regVer'} element={<RegVer/>}/>
                 <Route exact path={'/getAllAccounts'} element={<AllAccounts/>}/>
+                <Route path={`/getById/:id`} element={<AccountPage/>}/>
             </Routes>
         </Router>
     );

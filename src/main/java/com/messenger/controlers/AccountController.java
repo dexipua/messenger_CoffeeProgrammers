@@ -77,4 +77,11 @@ public class AccountController {
     public AccountResponse removeContact(@PathVariable long id, @PathVariable long contactId){
         return accountMapper.toResponse(accountService.removeContact(id, contactId));
     }
+
+    @GetMapping("/getById/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AccountResponse findById(@PathVariable long id) {
+        System.out.println(id);
+        return accountMapper.toResponse(accountService.findById(id));
+    }
 }

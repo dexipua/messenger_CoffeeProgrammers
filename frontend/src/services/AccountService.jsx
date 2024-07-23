@@ -60,6 +60,12 @@ class AccountService {
                 }));
     }
 
+    async getById(id) {
+        return await this.handleRequest(
+            () =>
+                apiClient.get(`${API_URL}/getById/${id}`));
+    }
+
     async update(firstName, lastName, description) {
         const userId = Cookies.get('id');
         return await this.handleRequest(
