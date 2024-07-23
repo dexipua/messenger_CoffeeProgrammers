@@ -10,9 +10,8 @@ const SendMessageBar = () => {
             sx={{
                 position: 'fixed',
                 bottom: 0,
-                left: 0,
                 right: 0,
-                width: '100%',
+                left: 300, // Встановлюємо ліву позицію на 240px
                 bgcolor: 'background.paper',
                 p: 1,
                 display: 'flex',
@@ -23,7 +22,7 @@ const SendMessageBar = () => {
         >
             <TextField
                 sx={{
-                    width: '400px'
+                  width: '400px'
                 }}
                 id="filled-basic"
                 label="Message"
@@ -31,7 +30,7 @@ const SendMessageBar = () => {
                 multiline
                 maxRows={4}
             />
-            <IconButton>
+            <IconButton color="primary">
                 <SendRoundedIcon />
             </IconButton>
         </Box>

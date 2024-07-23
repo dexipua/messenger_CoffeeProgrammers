@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequiredArgsConstructor
@@ -49,19 +48,21 @@ public class WebSocketController {
 //        );
 //    }
 
-    @MessageMapping("/private-message/{chat_id}/myId/{my_account_id}")
+    @MessageMapping("/private-message")
     public MessageResponse sendPrivateMessage(MessageRequest messageRequest,
-                                              @PathVariable("chat_id") long chatId,
-                                              @PathVariable("my_account_id") long accountId)
-            throws Exception {
+                                               long chatId,
+                                              long accountId
+    ) {
         Message savedMessage = messageService.create(chatId, accountId,
                 messageMapper.toModel(messageRequest));
+
         Chat chat = savedMessage.getChat();
+
         for (Account account : chat.getAccounts()) {
             if (!account.getId().equals(savedMessage.getAccount().getId())) {
                 messagingTemplate.convertAndSendToUser(
                         account.getId().toString(),
-                        "/private",
+                        "/queue/messages",
                         savedMessage
                 );
             }
@@ -69,4 +70,6 @@ public class WebSocketController {
         System.out.println(messageMapper.toResponse(savedMessage));
         return messageMapper.toResponse(savedMessage);
     }
+
+
 }
