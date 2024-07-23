@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
 import Cookies from "js-cookie";
-import SendMessageBar from "../components/common/SendMessageBar";
+import SendMessageBar from "./SendMessageBar";
 import axios from 'axios';
 
 let stompClient = null;
