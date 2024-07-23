@@ -60,11 +60,11 @@ public class Account implements UserDetails {
     private List<Chat> chats = new ArrayList<>();
 
     public Account(String password,
-                   String email, String role, String firstName,
+                   String email, String firstName,
                    String lastName, String description) {
         this.password = password;
         this.email = email;
-        this.role = Role.valueOf(role);
+        this.role = Role.USER;
         this.firstName = firstName;
         this.lastName = lastName;
         this.description = description;
