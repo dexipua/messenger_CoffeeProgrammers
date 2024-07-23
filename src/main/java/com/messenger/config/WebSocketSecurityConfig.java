@@ -20,7 +20,7 @@ public class WebSocketSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/**").permitAll()
+                                .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/ws/**").permitAll()
                                 .anyRequest().authenticated()
                 )

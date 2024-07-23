@@ -20,4 +20,6 @@ public class LoginRequestDTO {
                             "and one lowercase letter")
     private String password;
 
+    @NotBlank(message = "Code must be provided")
+    private String code;
 }

@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import Typography from "@mui/material/Typography";
 import {Box, Button, Paper, TextField} from "@mui/material";
 import Cookies from 'js-cookie';
+import AuthService from "../services/AuthService";
 
 const LoginVerification = () => {
     const email = Cookies.get('email');
@@ -16,29 +17,8 @@ const LoginVerification = () => {
         event.preventDefault();
 
         try {
-            const response =
-                await fetch('http://localhost:8080/api/verification/logging?code='+code, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({username: email, password}),
-            });
-            if (!response) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            Cookies.set('token', data.token);
-            Cookies.set('id', data.userId);
-            Cookies.set('firstName', data.firstName);
-            Cookies.set('lastName', data.lastName);
-
-            console.log(Cookies.get('token'))
-            console.log(Cookies.get('id'))
-            console.log( Cookies.get('firstName'))
-            console.log( Cookies.get('lastName'))
-
-            console.log('Login successful:', data);
+            const response = await AuthService.logVer(email, password, code);
+            console.log('Login successful:', response);
         } catch (error) {
             setError(error.message);
         } finally {
