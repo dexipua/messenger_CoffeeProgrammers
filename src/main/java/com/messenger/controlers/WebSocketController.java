@@ -54,16 +54,13 @@ public class WebSocketController {
         Chat chat = savedMessage.getChat();
 
         for (Account account : chat.getAccounts()) {
-            if (!account.getId().equals(savedMessage.getSender().getId())) {
-                messagingTemplate.convertAndSendToUser(
-                        account.getId().toString(),
-                        "/queue/messages",
-                        savedMessage
-                );
-            }
-
+            messagingTemplate.convertAndSendToUser(
+                    account.getId().toString(),
+                    "/queue/messages",
+                    savedMessage
+            );
         }
-        System.out.println(messageMapper.toResponse(savedMessage));
+        System.out.println("MESSAGE " + messageMapper.toResponse(savedMessage));
         return messageMapper.toResponse(savedMessage);
     }
 }

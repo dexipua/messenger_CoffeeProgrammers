@@ -52,7 +52,9 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public List<Account> findAllContacts(long id){
-        return findById(id).getContacts();
+        return findById(id).getContacts().stream().map(
+                a -> findById(a.getId())
+        ).toList();
     }
 
     @Override

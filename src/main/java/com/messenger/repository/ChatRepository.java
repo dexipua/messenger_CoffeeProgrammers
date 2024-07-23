@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ChatRepository extends JpaRepository<Chat, Long> {
-    @Query("SELECT a.chats FROM Account a WHERE a.id =:id")
+    @Query("SELECT a FROM Chat a JOIN a.accounts acc WHERE acc.id =:id")
     List<Chat> findAllByAccountId(Long id);
 }

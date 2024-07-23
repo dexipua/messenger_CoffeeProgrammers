@@ -47,17 +47,9 @@ public class Account implements UserDetails {
     @JoinTable(
             name = "account_contact",
             joinColumns = @JoinColumn(name = "my_account_id"),
-            inverseJoinColumns = @JoinColumn(name = "account_id")
+            inverseJoinColumns = @JoinColumn(name = "contact_id")
     )
-    private List<Account> contacts = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "account_chat",
-            joinColumns = @JoinColumn(name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "chat_id")
-    )
-    private List<Chat> chats = new ArrayList<>();
+    private List<Contact> contacts = new ArrayList<>();
 
     public Account(String password,
                    String email, String firstName,

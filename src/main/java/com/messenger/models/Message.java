@@ -25,7 +25,7 @@ public class Message {
     private Chat chat;
 
     @Column(name = "date")
-    private LocalDateTime date;
+    private LocalDateTime date = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "account_id")

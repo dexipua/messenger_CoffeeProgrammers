@@ -4,7 +4,7 @@ import * as React from "react";
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import IconButton from "@mui/material/IconButton";
 
-const SendMessageBar = () => {
+const SendMessageBar = ({message, changeMessage, sendMessage}) => {
     return (
         <Box
             sx={{
@@ -24,14 +24,16 @@ const SendMessageBar = () => {
                 sx={{
                   width: '400px'
                 }}
+                onChange={(e) => changeMessage(e.target.value)}
+                value={message}
                 id="filled-basic"
                 label="Message"
                 variant="outlined"
                 multiline
                 maxRows={4}
             />
-            <IconButton color="primary">
-                <SendRoundedIcon />
+            <IconButton onClick={sendMessage} color="primary">
+                <SendRoundedIcon/>
             </IconButton>
         </Box>
     )

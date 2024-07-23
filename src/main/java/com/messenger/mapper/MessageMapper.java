@@ -9,10 +9,13 @@ import com.messenger.services.interfaces.AccountService;
 import com.messenger.services.interfaces.ChatService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(uses = {AccountService.class, ChatService.class})
 public abstract class MessageMapper {
+    @Autowired
     private AccountService accountService;
+    @Autowired
     private ChatService chatService;
 
     @Mapping(target = "sender",

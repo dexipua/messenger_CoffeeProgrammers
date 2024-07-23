@@ -64,7 +64,6 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
                         loginRequest.getPassword()));
-        emailService.sendEmail(loginRequest.getUsername());
         Account user = (Account) authentication.getPrincipal();
         String jwtToken = jwtUtils.generateTokenFromUsername(user.getUsername());
 

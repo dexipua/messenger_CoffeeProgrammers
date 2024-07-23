@@ -27,8 +27,17 @@ const LoginVerification = () => {
             if (!response) {
                 throw new Error('Network response was not ok');
             }
-            Cookies.set(response);
             const data = await response.json();
+            Cookies.set('token', data.token);
+            Cookies.set('id', data.userId);
+            Cookies.set('firstName', data.firstName);
+            Cookies.set('lastName', data.lastName);
+
+            console.log(Cookies.get('token'))
+            console.log(Cookies.get('id'))
+            console.log( Cookies.get('firstName'))
+            console.log( Cookies.get('lastName'))
+
             console.log('Login successful:', data);
         } catch (error) {
             setError(error.message);
