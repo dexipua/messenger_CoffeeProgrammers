@@ -54,6 +54,11 @@ class ChatService {
         return await this.handleRequest(
             () => apiClient.get(`${API_URL}/findById/${id}`))
     }
+
+    async getByAccountIds(first_id, second_id){
+        return await this.handleRequest(
+            () => apiClient.get(`${API_URL}/exists/${first_id}/${second_id}`))
+    }
 }
 
 export default new ChatService();
