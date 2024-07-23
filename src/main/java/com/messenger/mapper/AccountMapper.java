@@ -6,7 +6,7 @@ import com.messenger.dto.account.AccountResponseSimple;
 import com.messenger.models.Account;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "accountMapper")
+@Mapper
 public interface AccountMapper {
     Account toModel(AccountRequest accountRequest);
     AccountResponse toResponse(Account account);

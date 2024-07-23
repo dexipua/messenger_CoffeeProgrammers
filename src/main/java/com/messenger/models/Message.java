@@ -29,5 +29,5 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "account_id")
-    private Account account;
+    private Account sender;
 }

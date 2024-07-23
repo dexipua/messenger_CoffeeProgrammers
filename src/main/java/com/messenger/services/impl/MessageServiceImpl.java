@@ -2,8 +2,6 @@ package com.messenger.services.impl;
 
 import com.messenger.models.Message;
 import com.messenger.repository.MessageRepository;
-import com.messenger.services.interfaces.AccountService;
-import com.messenger.services.interfaces.ChatService;
 import com.messenger.services.interfaces.MessageService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +13,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
-    private final ChatService chatService;
-    private final AccountService accountService;
 
     @Override
     public List<Message> getAllByChatId(Long chatId) {
@@ -29,9 +25,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message create(Long chatId, Long senderId, Message message) {
-        message.setChat(chatService.findById(chatId));
-        message.setAccount(accountService.findById(senderId));
+    public Message create(Message message) {
         return messageRepository.save(message);
     }
 

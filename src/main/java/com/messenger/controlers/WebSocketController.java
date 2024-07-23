@@ -49,27 +49,21 @@ public class WebSocketController {
 //    }
 
     @MessageMapping("/private-message")
-    public MessageResponse sendPrivateMessage(MessageRequest messageRequest,
-                                               long chatId,
-                                              long accountId
-    ) {
-        Message savedMessage = messageService.create(chatId, accountId,
-                messageMapper.toModel(messageRequest));
-
+    public MessageResponse sendPrivateMessage(MessageRequest messageRequest) {
+        Message savedMessage = messageService.create(messageMapper.toModel(messageRequest));
         Chat chat = savedMessage.getChat();
 
         for (Account account : chat.getAccounts()) {
-            if (!account.getId().equals(savedMessage.getAccount().getId())) {
+            if (!account.getId().equals(savedMessage.getSender().getId())) {
                 messagingTemplate.convertAndSendToUser(
                         account.getId().toString(),
                         "/queue/messages",
                         savedMessage
                 );
             }
+
         }
         System.out.println(messageMapper.toResponse(savedMessage));
         return messageMapper.toResponse(savedMessage);
     }
-
-
 }
