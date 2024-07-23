@@ -13,4 +13,4 @@ values (0, 'vh@gmail.com',
 insert into accounts(role, email, password, last_name, first_name, description, status)
 values (0, 'vb@gmail.com',
         '$2a$12$tCc7xjpcZZg0PT57MxYmX.3Pp2gedmXUHfS86IHz5Y8RUoIKq.Ma6',
-        'Bulakovski', 'Vlad', 'None', 1);
+        'Bulakovskyi', 'Vlad', 'None', 1);
