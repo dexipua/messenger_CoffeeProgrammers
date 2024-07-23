@@ -1,6 +1,7 @@
 package com.messenger.services.impl;
 
 import com.messenger.mapper.ChatMapper;
+import com.messenger.models.Account;
 import com.messenger.models.Chat;
 import com.messenger.repository.ChatRepository;
 import com.messenger.services.interfaces.AccountService;
@@ -45,5 +46,10 @@ public class ChatServiceImpl implements ChatService {
     public List<Chat> findByAccountId(Long accountId) {
         accountService.findById(accountId);
         return chatRepository.findAllByAccountId(accountId);
+    }
+
+    @Override
+    public Long findChatsByAccountIds(List<Long> accountsIds){
+        return chatRepository.findChatsByAccountIds(accountsIds);
     }
 }
