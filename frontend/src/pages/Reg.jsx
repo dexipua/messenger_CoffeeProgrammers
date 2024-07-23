@@ -77,7 +77,7 @@ const Reg = () => {
                             margin="normal"
                         />
                         <Button type="submit" variant="contained" color="primary" sx={{mt: 2}}>
-                            Login
+                            Regis
                         </Button>
                     </Box>
                 </Paper>
