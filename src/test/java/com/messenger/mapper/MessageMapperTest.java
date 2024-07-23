@@ -28,11 +28,10 @@ class MessageMapperTest {
 
         Chat chat = new Chat();
         chat.setId(1L);
-        chat.setMessages(Collections.singletonList(message));
         chat.setAccounts(Collections.singletonList(account));
 
         message.setChat(chat);
-        message.setAccount(account);
+        message.setSender(account);
 
         // when
         MessageResponse messageResponse = messageMapper.toResponse(message);
@@ -41,8 +40,8 @@ class MessageMapperTest {
         assertThat(messageResponse).isNotNull();
         assertThat(messageResponse.getId()).isEqualTo(1L);
         assertThat(messageResponse.getText()).isEqualTo("Hello");
-        assertThat(messageResponse.getAccountResponse()).isNotNull();
-        assertThat(messageResponse.getAccountResponse().getId()).isEqualTo(1L);
+        assertThat(messageResponse.getSender()).isNotNull();
+        assertThat(messageResponse.getSender().getId()).isEqualTo(1L);
     }
 
     @Test
