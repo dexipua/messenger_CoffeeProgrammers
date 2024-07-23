@@ -3,7 +3,6 @@ package com.messenger.controlers;
 import com.messenger.dto.chat.ChatRequest;
 import com.messenger.dto.chat.ChatResponse;
 import com.messenger.mapper.ChatMapper;
-import com.messenger.models.Chat;
 import com.messenger.services.interfaces.ChatService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,11 +47,11 @@ public class ChatController {
 
     @GetMapping("/exists/{first_account_id}/{second_account_id}")
     @ResponseStatus(HttpStatus.OK)
-    public Long findChatsByAccountIds(@PathVariable Long first_account_id,
+    public List<ChatResponse> findChatsByAccountIds(@PathVariable Long first_account_id,
                                       @PathVariable Long second_account_id) {
         List<Long> list = List.of(first_account_id, second_account_id);
-        return chatService.findChatsByAccountIds(list);
-
+        return chatService.findChatsByAccountIds(list).stream()
+                .map(chatMapper::toResponse).toList();
     }
 
 }

@@ -71,11 +71,9 @@ class AccountService {
         return await this.handleRequest(
             () => apiClient.post(`${API_URL}/update/${userId}`,
                 {
-                    param: {
-                        firstName: firstName,
-                        lastName: lastName,
-                        description: description
-                    }
+                    firstName: firstName,
+                    lastName: lastName,
+                    description: description
                 }
             ));
     }

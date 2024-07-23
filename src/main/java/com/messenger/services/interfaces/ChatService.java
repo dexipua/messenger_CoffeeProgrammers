@@ -1,6 +1,5 @@
 package com.messenger.services.interfaces;
 
-import com.messenger.models.Account;
 import com.messenger.models.Chat;
 
 import java.util.List;
@@ -10,5 +9,5 @@ public interface ChatService {
     void delete(Long chatId);
     Chat findById(Long chatId);
     List<Chat> findByAccountId(Long accountId);
-    Long findChatsByAccountIds(List<Long> accountsIds);
+    List<Chat> findChatsByAccountIds(List<Long> accountsIds);
 }

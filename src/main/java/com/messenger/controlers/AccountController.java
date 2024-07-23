@@ -42,7 +42,7 @@ public class AccountController {
                 .map(accountMapper::toResponseSimple).toList();
     }
 
-    @PutMapping("/update/{id}")
+    @PostMapping("/update/{id}")
     @ResponseStatus(HttpStatus.OK)
     public AccountResponse update(
             @RequestBody @Valid AccountRequest accountRequest,
