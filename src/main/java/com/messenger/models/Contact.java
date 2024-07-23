@@ -9,8 +9,12 @@ import lombok.*;
 @Table(name = "contacts")
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"id", "email"})
+@EqualsAndHashCode(exclude = {"id"})
 public class Contact {
+    public Contact(Long accountId) {
+        this.accountId = accountId;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

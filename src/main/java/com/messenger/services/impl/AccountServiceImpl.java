@@ -1,8 +1,10 @@
 package com.messenger.services.impl;
 
 import com.messenger.models.Account;
+import com.messenger.models.Contact;
 import com.messenger.repository.AccountRepository;
 import com.messenger.services.interfaces.AccountService;
+import com.messenger.services.interfaces.ContactService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ContactService contactService;
 
 
     @Override
@@ -28,6 +31,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
             throw new EntityExistsException("User with email " +
                     account.getEmail() + " already exists");
         }
+        contactService.create(new Contact(account.getId()));
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         return accountRepository.save(account);
     }
