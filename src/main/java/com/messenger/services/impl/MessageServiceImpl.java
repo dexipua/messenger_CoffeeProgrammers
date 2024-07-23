@@ -5,6 +5,7 @@ import com.messenger.repository.MessageRepository;
 import com.messenger.services.interfaces.MessageService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,12 +17,14 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<Message> getAllByChatId(Long chatId) {
-        return messageRepository.findByChatId(chatId);
+        return messageRepository.findByChatId(chatId,
+                Sort.by(Sort.Direction.ASC, "date"));
     }
 
     @Override
     public List<Message> getAllByChatIdAndTextContaining(Long chatId, String text) {
-        return messageRepository.findByChatIdAndTextContaining(chatId, text);
+        return messageRepository.findByChatIdAndTextContaining(chatId, text,
+                Sort.by(Sort.Direction.ASC, "date"));
     }
 
     @Override
