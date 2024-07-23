@@ -24,9 +24,7 @@ public class ChatController {
     public ChatResponse create(@PathVariable("first_account_id") Long firstAccountId,
                                @PathVariable("second_account_id") Long secondAccountId,
                                @Valid @RequestBody ChatRequest chatRequest) {
-        Chat chat = chatService.create(firstAccountId, secondAccountId);
-        chat.setName(chatRequest.getName());
-        return chatMapper.toResponse(chat);
+        return chatMapper.toResponse(chatService.create(firstAccountId, secondAccountId, chatRequest.getName()));
     }
 
     @DeleteMapping("/delete/{chatId}")

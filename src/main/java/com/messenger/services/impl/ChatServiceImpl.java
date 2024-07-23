@@ -20,10 +20,11 @@ public class ChatServiceImpl implements ChatService {
 
 
     @Override
-    public Chat create(Long firstId, Long secondId) {
+    public Chat create(Long firstId, Long secondId, String name) {
         Chat chat = new Chat();
         chat.getAccounts().add(accountService.findById(firstId));
         chat.getAccounts().add(accountService.findById(secondId));
+        chat.setName(name);
         return chatRepository.save(chat);
     }
 
