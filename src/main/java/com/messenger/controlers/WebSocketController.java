@@ -57,7 +57,7 @@ public class WebSocketController {
             messagingTemplate.convertAndSendToUser(
                     account.getId().toString(),
                     "/queue/messages",
-                    savedMessage
+                    messageMapper.toResponse(savedMessage)
             );
         }
         System.out.println("MESSAGE " + messageMapper.toResponse(savedMessage));
