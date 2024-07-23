@@ -1,6 +1,8 @@
 package com.messenger.services.impl;
 
+import com.messenger.models.VerificationCode;
 import com.messenger.services.interfaces.EmailService;
+import com.messenger.services.interfaces.VerificationCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +14,10 @@ import java.util.Properties;
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
-    private String code = "12";
-    private void setCode(){
-        code = "12";
-    }
+    private final VerificationCodeService verificationCodeService;
     public void sendEmail(String to) {
-        setCode();
         String host = "smtp.office365.com";
-        final String username = "coffeeprogrammers@ukr.net";
+        final String username = "coffeeprogrammers@outlook.com";
         final String password = "Some.1234";
 
         Properties properties = new Properties();
@@ -35,24 +33,15 @@ public class EmailServiceImpl implements EmailService {
         });
 
         try {
+            VerificationCode verificationCode = verificationCodeService.generateNewVerificationCode(to);
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-            message.setSubject("VERIFICATION");
-            message.setText("Your Verification code is: " + code + ". Dont say it anyone other");
-
+            message.setSubject("VERIFICATION CODE FOR YOU, " + to);
+            message.setText("Your code is " + verificationCode.getCode() + ". Secure it!!!");
             Transport.send(message);
         } catch (MessagingException e) {
             e.printStackTrace();
-        }
-    }
-
-    public boolean verification(String theirCode){
-        System.out.println(theirCode + " " + code);
-        if(theirCode.equals(code)){
-            return true;
-        }else{
-            throw new UnsupportedOperationException("Wrong code");
         }
     }
 }

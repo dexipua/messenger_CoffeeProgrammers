@@ -12,5 +12,7 @@
     <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0009__insert_account_contact.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0010__create_table_messages.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0014__insert_contacts.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0012__create_table_codes.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0013__insert_codes.sql" dialect="GenericSQL" />
   </component>
 </project>

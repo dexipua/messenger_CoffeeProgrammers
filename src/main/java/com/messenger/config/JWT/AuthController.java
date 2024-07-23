@@ -25,11 +25,12 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtConfig jwtUtils;
     private final EmailService emailService;
+    private final VerificationCodeService verificationCodeService;
 
     @PostMapping("/login")
     public boolean login(@RequestBody StringRequestDTO loginRequest) {
         if(accountService.isExistByEmail(loginRequest.getMessage())) {
-            //emailService.sendEmail(loginRequest.getMessage());
+            emailService.sendEmail(loginRequest.getMessage());
             return true;
         }else{
             throw new UnsupportedOperationException(
@@ -40,7 +41,7 @@ public class AuthController {
     @PostMapping("/registration")
     public boolean registration(@RequestBody StringRequestDTO email) {
         if(!(accountService.isExistByEmail(email.getMessage()))) {
-            //emailService.sendEmail(email.getMessage());
+            emailService.sendEmail(email.getMessage());
             return true;
         }else{
             throw new UnsupportedOperationException(
@@ -59,7 +60,7 @@ public class AuthController {
     public AuthResponseDTO verificationEmailLog(
             @RequestParam("code") String code,
             @RequestBody @Valid LoginRequestDTO loginRequest) {
-        emailService.verification(code);
+        verificationCodeService.verification(loginRequest.getUsername(), code.getMessage());
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
@@ -76,7 +77,7 @@ public class AuthController {
     public AuthResponseDTO verificationEmailRegis(
             @RequestParam("code") String code,
             @RequestBody @Valid RegistrationRequestDTO registrationRequest) {
-        emailService.verification(code);
+        verificationCodeService.verification(registrationRequest.getUsername(), code.getMessage());
         Account user = accountService.create(new Account(
                 registrationRequest.getPassword(),
                 registrationRequest.getUsername(),
