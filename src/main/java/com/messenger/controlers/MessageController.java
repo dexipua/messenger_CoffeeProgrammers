@@ -22,12 +22,4 @@ public class MessageController {
         return messageService.getAllByChatId(chatId).stream()
                 .map(messageMapper::toResponse).toList();
     }
-
-    @GetMapping("getByChatAndText/{chat_id}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<MessageResponse> getMessagesByChatIdAndTextContaining(
-            @PathVariable("chat_id") Long chatId, @RequestParam String text) {
-        return messageService.getAllByChatIdAndTextContaining(chatId, text)
-                .stream().map(messageMapper::toResponse).toList();
-    }
 }
