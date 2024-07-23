@@ -84,25 +84,19 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public Account addContact(long id, long contactId){
-        Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Account not found with id: " + id));
+        Account account = findById(id);
 
-        Contact contact = contactRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Contact not found with id: " + id));;
+        account.getContacts().add(contactService.findByAccountId(contactId));
 
-        account.getContacts().add(contact);
         return accountRepository.save(account);
     }
 
     @Override
     public Account removeContact(long id, long contactId){
-        Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Account not found with id: " + id));
+        Account account = findById(id);
 
-        Contact contact = contactRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Contact not found with id: " + id));;
+        account.getContacts().remove(contactService.findByAccountId(contactId));
 
-        account.getContacts().remove(contact);
         return accountRepository.save(account);
     }
 }
