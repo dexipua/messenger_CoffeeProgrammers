@@ -4,7 +4,7 @@ import Main from "./pages/Main";
 import LoginVerification from "./pages/LoginVerefication";
 import Reg from "./pages/Reg";
 import RegVer from "./pages/RegVer";
-import Chat from "./pages/Chat";
+import Chat from "./components/common/Chat";
 
 function App() {
     return (

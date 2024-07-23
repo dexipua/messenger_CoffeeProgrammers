@@ -11,9 +11,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MyAvatar from "./MyAvatar";
-import axios from "axios";
-import Cookies from "js-cookie";
 import {AppBar, Drawer} from "@mui/material";
+import ChatService from "../../services/ChatService";
 
 const drawerWidth = 300;
 
@@ -27,18 +26,9 @@ export default function SideBar({selectChatId}) {
     useEffect(() => {
         const getData = async () => {
             try {
-                const token = Cookies.get('token');
-                const response = await axios.get(
-                    'http://localhost:8080/chats/findByAccountId/1',
-                    {
-                        withCredentials: true,
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    }
-                );
-                console.log(response);
-                setMyChats(response.data);
+                const response = await ChatService.getAllByUserId()
+
+                setMyChats(response);
             } catch (error) {
                 setError(error);
             } finally {
