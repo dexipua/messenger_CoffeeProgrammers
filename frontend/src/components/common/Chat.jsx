@@ -4,6 +4,7 @@ import {Client} from '@stomp/stompjs';
 import Cookies from "js-cookie";
 import SendMessageBar from "./SendMessageBar";
 import axios from 'axios';
+import MessageBox from "./MessageBox";
 
 let stompClient = null;
 
@@ -93,10 +94,13 @@ const Chat = ({ selectedChatId }) => {
             ) : (
                 <>
                     <div>
-                        {messages && messages.map((msg) => (
-                            <div key={msg.id}>
-                                <b>{msg.sender.firstName + " " + msg.sender.lastName}</b>: {msg.text}
+                        {messages && messages.map((message) => (
+                            <div key={message.id}>
+                                <MessageBox
+                                    message={message}
+                                />
                             </div>
+
                         ))}
                     </div>
                     <SendMessageBar

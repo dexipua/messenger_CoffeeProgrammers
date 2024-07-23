@@ -14,7 +14,7 @@ import MyAvatar from "./MyAvatar";
 import {AppBar, Drawer} from "@mui/material";
 import ChatService from "../../services/ChatService";
 
-const drawerWidth = 300;
+const drawerWidth = 260;
 
 export default function SideBar({selectChatId}) {
     const [myChats, setMyChats] = useState([])
