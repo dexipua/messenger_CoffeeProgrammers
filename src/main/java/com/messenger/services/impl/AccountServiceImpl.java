@@ -3,6 +3,7 @@ package com.messenger.services.impl;
 import com.messenger.models.Account;
 import com.messenger.models.Contact;
 import com.messenger.repository.AccountRepository;
+import com.messenger.repository.ContactRepository;
 import com.messenger.services.interfaces.AccountService;
 import com.messenger.services.interfaces.ContactService;
 import jakarta.persistence.EntityExistsException;
@@ -26,6 +27,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final ContactService contactService;
+    private final ContactRepository contactRepository;
 
 
     @Override
@@ -92,5 +94,23 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     @Override
     public boolean isExistByEmail(String email) {
         return accountRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Account addContact(long id, long contactId){
+        Account account = findById(id);
+
+        account.getContacts().add(contactService.findByAccountId(contactId));
+
+        return accountRepository.save(account);
+    }
+
+    @Override
+    public Account removeContact(long id, long contactId){
+        Account account = findById(id);
+
+        account.getContacts().remove(contactService.findByAccountId(contactId));
+
+        return accountRepository.save(account);
     }
 }

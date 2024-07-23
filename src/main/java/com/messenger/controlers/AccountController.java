@@ -65,4 +65,16 @@ public class AccountController {
         responseDTO.setPages((int) objects[1] - 1);
         return responseDTO;
     }
+
+    @PostMapping("/{id}/addContact/{contactId}")
+    @ResponseStatus(HttpStatus.OK)
+    public AccountResponse addContact(@PathVariable long id, @PathVariable long contactId){
+        return accountMapper.toResponse(accountService.addContact(id, contactId));
+    }
+
+    @DeleteMapping("/{id}/removeContact/{contactId}")
+    @ResponseStatus(HttpStatus.OK)
+    public AccountResponse removeContact(@PathVariable long id, @PathVariable long contactId){
+        return accountMapper.toResponse(accountService.removeContact(id, contactId));
+    }
 }

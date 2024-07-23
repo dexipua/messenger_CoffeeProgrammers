@@ -12,4 +12,6 @@ public interface AccountService {
     Account update(Account account, long id);
     Object[] findByNames(String lastName, String firstName, int page, int size);
     boolean isExistByEmail(String email);
+    Account addContact(long id, long contactId);
+    Account removeContact(long id, long contactId);
 }
