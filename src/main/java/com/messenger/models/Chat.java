@@ -2,6 +2,8 @@ package com.messenger.models;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -18,6 +20,9 @@ public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "name")
+    String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
