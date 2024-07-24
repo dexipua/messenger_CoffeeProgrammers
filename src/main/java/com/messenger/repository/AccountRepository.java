@@ -19,9 +19,10 @@ public interface AccountRepository extends JpaRepository<Account, Long>{
             "(SELECT ac.id FROM Account acc JOIN acc.contacts ac WHERE acc.id = :accountId)")
     Page<Account> findAccountsNotInContactList(@Param("accountId") Long accountId, PageRequest pageRequest);
 
-    @Query("SELECT a FROM Account a WHERE a.firstName LIKE %:firstName% AND a.lastName LIKE %:lastName%")
-    Page<Account> findByFirstNameAndLastName(@Param("firstName") String firstName,
-                                             @Param("lastName") String lastName,
-                                             PageRequest pageRequest);
+    @Query("SELECT a FROM Account a WHERE a.id <> :excludedId AND a.firstName LIKE %:firstName% AND a.lastName LIKE %:lastName%")
+    Page<Account> findByFirstNameAndLastNameExcludingId(@Param("firstName") String firstName,
+                                                        @Param("lastName") String lastName,
+                                                        @Param("excludedId") Long excludedId,
+                                                        PageRequest pageRequest);
 
 }
