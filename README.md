@@ -112,3 +112,8 @@ password
 passWord1 - one for all
 
 code for verification is 12 for this accounts
+
+## P.S.
+
+If a javax.mail.AuthenticationFailedException happened,
+most likely someone stole our email and changed the password

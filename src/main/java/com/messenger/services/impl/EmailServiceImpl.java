@@ -68,6 +68,8 @@ public class EmailServiceImpl implements EmailService {
             message.setHeader("List-Unsubscribe", unsubscribeHeader);
 
             Transport.send(message);
+//          IF A javax.mail.AuthenticationFailedException HAPPENED,
+//          MOST LIKELY SOMEONE STOLE OUR EMAIL AND CHANGED THE PASSWORD
         } catch (MessagingException e) {
             e.printStackTrace();
         }
