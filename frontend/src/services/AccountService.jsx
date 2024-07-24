@@ -77,6 +77,12 @@ class AccountService {
                 }
             ));
     }
+
+    async removeFromContact(accountId, contactId) {
+        return await this.handleRequest(
+            () =>
+                apiClient.delete(`/${accountId}/removeContact/${contactId}`));
+    }
 }
 
 export default new AccountService();

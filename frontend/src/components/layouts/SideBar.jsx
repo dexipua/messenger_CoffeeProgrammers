@@ -29,7 +29,7 @@ const drawerStyles = {
 
 export default function SideBar({selectChatId}) {
     const [myChats, setMyChats] = useState([])
-    const [myContacts, setMyContacts] = useState()
+    const [myContacts, setMyContacts] = useState([])
 
     const [tab, setTab] = useState("MENU")
 
@@ -57,6 +57,9 @@ export default function SideBar({selectChatId}) {
         getData();
     }, []);
 
+    const handleDeleteFromContact = (contactId) => {
+        setMyContacts(myContacts.filter(contact => contact.id !== contactId));
+    }
 
     let tabContent;
     switch (tab) {
@@ -67,7 +70,11 @@ export default function SideBar({selectChatId}) {
             tabContent = <MyChats chats={myChats} selectChatId={selectChatId} />;
             break;
         case "CONTACTS":
-            tabContent = <MyContacts contacts={myContacts} selectChatId={selectChatId}/>;
+            tabContent = <MyContacts
+                contacts={myContacts}
+                selectChatId={selectChatId}
+                handleDelete={handleDeleteFromContact}
+            />;
             break;
         case "MY_ACCOUNT":
             tabContent = <AccountBox id={accountId}/>;
