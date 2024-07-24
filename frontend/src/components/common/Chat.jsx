@@ -2,17 +2,19 @@ import React, {useEffect, useState} from 'react';
 import SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
 import Cookies from "js-cookie";
-import SendMessageBar from "./SendMessageBar";
+import SendMessageBar from "./message/SendMessageBar";
 import axios from 'axios';
+import MessageBox from "./message/MessageBox";
 
 let stompClient = null;
 
-const Chat = ({ selectedChatId }) => {
+const Chat = ({selectedChatId}) => {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        console.log("USEEFFECT")
         const setupWebSocket = async () => {
             try {
                 const socket = new SockJS('http://localhost:8080/ws');
@@ -86,27 +88,28 @@ const Chat = ({ selectedChatId }) => {
         setMessages((prevMessages) => [...prevMessages, receivedMessage]);
     };
 
+    if (loading) {
+        <div>Loading...</div>
+    }
+
     return (
-        <div>
-            {loading ? (
-                <div>Loading...</div>
-            ) : (
-                <>
-                    <div>
-                        {messages && messages.map((msg) => (
-                            <div key={msg.id}>
-                                <b>{msg.sender.firstName + " " + msg.sender.lastName}</b>: {msg.text}
-                            </div>
-                        ))}
-                    </div>
-                    <SendMessageBar
+        <>
+            {messages && messages.map((message) => (
+                <div key={message.id}>
+                    <MessageBox
                         message={message}
-                        changeMessage={setMessage}
-                        sendMessage={sendMessage}
                     />
-                </>
-            )}
-        </div>
+                </div>
+
+            ))}
+            <SendMessageBar
+                message={message}
+                changeMessage={setMessage}
+                sendMessage={sendMessage}
+            />
+
+
+        </>
     );
 };
 

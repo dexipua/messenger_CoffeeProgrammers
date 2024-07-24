@@ -1,13 +1,15 @@
 package com.messenger.dto.chat;
 
-import com.messenger.dto.account.AccountResponseSimple;
+import com.messenger.models.Account;
+import com.messenger.models.Message;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ChatResponseTest {
 

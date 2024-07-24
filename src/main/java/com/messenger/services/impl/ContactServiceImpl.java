@@ -15,4 +15,10 @@ public class ContactServiceImpl implements ContactService {
     public Contact create(Contact contact) {
         return contactRepository.save(contact);
     }
+
+    @Override
+    public Contact findByAccountId(long contactId) {
+        return contactRepository.findById(contactId)
+                .orElseThrow(() -> new IllegalArgumentException("Contact not found with id: " + contactId));
+    }
 }

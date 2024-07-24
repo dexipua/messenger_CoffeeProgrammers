@@ -47,7 +47,6 @@ class ChatRepositoryTest {
         chat2.getAccounts().add(account);
         chatRepository.save(chat1);
         chatRepository.save(chat2);
-
         accountRepository.save(account);
 
         // when

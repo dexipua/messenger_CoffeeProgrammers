@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/auth")
 public class AuthController {
     private final AccountService accountService;
     private final AuthenticationManager authenticationManager;
@@ -76,12 +76,17 @@ public class AuthController {
         return jwtUtils.validateJwtToken(token.getMessage());
     }
 
-    @PostMapping("/verification/logging")
+    @GetMapping("/refresh")
+    public String refreshToken(@RequestBody StringRequestDTO token) {
+        System.out.println(token.getMessage());
+        return jwtUtils.refreshToken(token.getMessage());
+    }
+
+    @PostMapping("/verification/login")
     @ResponseStatus(HttpStatus.OK)
     public AuthResponseDTO verificationEmailLog(
-            @RequestParam("code") String code,
             @RequestBody @Valid LoginRequestDTO loginRequest) {
-        verificationCodeService.verification(loginRequest.getUsername(), code);
+        verificationCodeService.verification(loginRequest.getUsername(), loginRequest.getCode());
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
@@ -96,9 +101,8 @@ public class AuthController {
     @PostMapping("/verification/regis")
     @ResponseStatus(HttpStatus.OK)
     public AuthResponseDTO verificationEmailRegis(
-            @RequestParam("code") String code,
             @RequestBody @Valid RegistrationRequestDTO registrationRequest) {
-        verificationCodeService.verification(registrationRequest.getUsername(), code);
+        verificationCodeService.verification(registrationRequest.getUsername(), registrationRequest.getCode());
         Account user = accountService.create(new Account(
                 registrationRequest.getPassword(),
                 registrationRequest.getUsername(),

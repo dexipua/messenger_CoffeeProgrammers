@@ -6,6 +6,7 @@ import com.messenger.models.Message;
 import com.messenger.repository.MessageRepository;
 import com.messenger.services.interfaces.AccountService;
 import com.messenger.services.interfaces.ChatService;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,5 +70,49 @@ class MessageServiceImplTest {
         when(messageRepository.save(message)).thenReturn(message);
         assertEquals(message, messageService.create(message));
         verify(messageRepository, times(1)).save(message);
+        when(chatService.findById(message.getChat().getId())).thenReturn(chat);
+        when(accountService.findById(message.getAccount().getId())).thenReturn(account);
+        assertEquals(message, messageService.create(message.getChat().getId(), message.getAccount().getId(), message));
+        verify(messageRepository, times(1)).save(message);
+        verify(chatService, times(1)).findById(message.getChat().getId());
+        verify(accountService, times(1)).findById(message.getAccount().getId());
+    }
+
+    @Test
+    void notCreateChat() {
+        when(chatService.findById(message.getChat().getId())).thenThrow(new EntityNotFoundException("Chat with id " + message.getChat().getId() + " not found"));
+        assertThrows(EntityNotFoundException.class, () -> messageService.create(message.getChat().getId(), message.getAccount().getId(), message));
+        verify(messageRepository, never()).save(message);
+        verify(chatService, times(1)).findById(message.getChat().getId());
+        verify(accountService, never()).findById(message.getAccount().getId());
+    }
+
+    @Test
+    void notCreateAccount() {
+        when(accountService.findById(message.getAccount().getId())).thenThrow(new EntityNotFoundException("Account with id " + message.getAccount().getId() + " not found"));
+        assertThrows(EntityNotFoundException.class, () -> messageService.create(message.getChat().getId(), message.getAccount().getId(), message));
+        verify(messageRepository, never()).save(message);
+    }
+
+    @Test
+    void update() {
+        when(messageRepository.findById(message.getId())).thenReturn(Optional.of(message));
+        when(messageRepository.save(message)).thenReturn(message);
+        assertEquals(messageToUpdate.getText(), messageService.update(messageToUpdate).getText());
+        verify(messageRepository, times(1)).findById(message.getId());
+    }
+
+    @Test
+    void findById() {
+        when(messageRepository.findById(message.getId())).thenReturn(Optional.of(message));
+        assertEquals(message, messageService.findById(message.getId()));
+        verify(messageRepository, times(1)).findById(message.getId());
+    }
+
+    @Test
+    void notFoundById() {
+        when(messageRepository.findById(message.getId())).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> messageService.findById(message.getId()));
+        verify(messageRepository, times(1)).findById(message.getId());
     }
 }

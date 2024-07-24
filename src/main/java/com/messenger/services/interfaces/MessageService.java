@@ -7,4 +7,5 @@ import java.util.List;
 public interface MessageService {
     List<Message> getAllByChatId(Long chatId);
     Message create(Message message);
+    void delete(long id);
 }

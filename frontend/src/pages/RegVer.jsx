@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import Typography from "@mui/material/Typography";
 import {Box, Button, Paper, TextField} from "@mui/material";
 import Cookies from 'js-cookie';
+import AuthService from "../services/AuthService";
 
 const RegVer = () => {
     const email = Cookies.get('email');
@@ -19,14 +20,8 @@ const RegVer = () => {
         event.preventDefault();
 
         try {
-            const response =
-                await fetch('http://localhost:8080/api/verification/regis?code='+code, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({username: email, password}),
-            });
+            const response = AuthService.regVer(email, password, code,
+                description, firstName, lastName)
             if (!response) {
                 throw new Error('Network response was not ok');
             }

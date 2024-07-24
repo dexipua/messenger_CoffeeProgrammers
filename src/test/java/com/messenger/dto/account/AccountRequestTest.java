@@ -14,6 +14,7 @@ class AccountRequestTest {
         AccountRequest accountRequest2 = new AccountRequest();
         accountRequest2.setFirstName(accountRequest1.getFirstName());
         accountRequest2.setLastName(accountRequest1.getLastName());
+        accountRequest2.setPassword(accountRequest1.getPassword());
         accountRequest2.setDescription(accountRequest1.getDescription());
 
         assertEquals(accountRequest1, accountRequest2);

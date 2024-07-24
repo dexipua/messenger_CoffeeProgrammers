@@ -3,11 +3,15 @@ package com.messenger.services.impl;
 import com.messenger.models.Account;
 import com.messenger.models.Contact;
 import com.messenger.repository.AccountRepository;
+import com.messenger.repository.ContactRepository;
 import com.messenger.services.interfaces.AccountService;
 import com.messenger.services.interfaces.ContactService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +27,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final ContactService contactService;
+    private final ContactRepository contactRepository;
 
 
     @Override
@@ -43,8 +48,13 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public List<Account> findAll() {
-        return accountRepository.findAll();
+    public Object[] findAll(int page, int size) {
+        Object[] objects = new Object[2];
+        Page<Account> pageR = accountRepository.findAll(PageRequest.of(page, size,
+                Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
+        objects[0] = pageR.toList();
+        objects[1] = pageR.getTotalPages();
+        return objects;
     }
 
     @Override
@@ -71,12 +81,42 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public List<Account> findByNames(String lastName, String firstName) {
-        return accountRepository.findAllByLastNameContainsAndFirstNameContains(lastName, firstName);
+    public Object[] findByNames(String lastName, String firstName, int page, int size) {
+        Object[] objects = new Object[2];
+        Page<Account> pageR = accountRepository.findAllByLastNameContainsAndFirstNameContains(
+                lastName, firstName, PageRequest.of(page, size,
+                        Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
+        objects[0] = pageR.toList();
+        objects[1] = pageR.getTotalPages();
+        return objects;
     }
 
     @Override
     public boolean isExistByEmail(String email) {
         return accountRepository.existsByEmail(email);
     }
+
+    @Override
+    public Account addContact(long id, long contactId){
+        Account account = findById(id);
+
+        account.getContacts().add(contactService.findByAccountId(contactId));
+
+        return accountRepository.save(account);
+    }
+
+    @Override
+    public Account removeContact(long id, long contactId){
+        Account account = findById(id);
+
+        account.getContacts().remove(contactService.findByAccountId(contactId));
+
+        return accountRepository.save(account);
+    }
+
+    @Override
+    public List<Account> findAccountsNotInContactList(Long accountId, int page, int size) {
+        return accountRepository.findAccountsNotInContactList(accountId, PageRequest.of(page, size)).toList();
+    }
+
 }

@@ -12,5 +12,6 @@ import java.util.List;
 @Getter
 public class ChatResponse {
     private Long id;
+    private String name;
     private List<AccountResponseSimple> accounts;
 }

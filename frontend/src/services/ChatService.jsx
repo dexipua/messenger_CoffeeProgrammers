@@ -35,6 +35,28 @@ class ChatService {
         return await this.handleRequest(
             () => apiClient.get(`/findByAccountId/${userId}`));
     }
+
+    async delete(id) {
+        return await this.handleRequest(
+            () => apiClient.delete(`/findByAccountId/${id}`));
+    }
+
+    async create(firstAccountId, secondAccountId, name) {
+        return await this.handleRequest(
+            () => apiClient.post(`/create/${firstAccountId}/${secondAccountId}`, {
+                name: name
+            }))
+    }
+
+    async getById(id) {
+        return await this.handleRequest(
+            () => apiClient.get(`/findById/${id}`))
+    }
+
+    async getByAccountIds(first_id, second_id) {
+        return await this.handleRequest(
+            () => apiClient.get(`/exists/${first_id}/${second_id}`))
+    }
 }
 
 export default new ChatService();

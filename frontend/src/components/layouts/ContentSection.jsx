@@ -17,7 +17,7 @@ const ContentSection = ({selectedChatId}) => {
         <Container>
             <Box component="main" sx={{flexGrow: 1, p: 3}}>
                 <DrawerHeader/>
-                <Box mb='50px'>
+                <Box mb='60px'>
                     {selectedChatId && <Chat selectedChatId={selectedChatId}/>}
                 </Box>
             </Box>
