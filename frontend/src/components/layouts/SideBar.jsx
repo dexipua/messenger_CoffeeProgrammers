@@ -63,6 +63,10 @@ export default function SideBar({selectChatId}) {
         setMyContacts(myContacts.filter(contact => contact.id !== contactId));
     }
 
+    const handleAddContact = (contact) => {
+        setMyContacts((prev) => [...prev, contact]);
+    };
+
     const handleAddChatToList = (newChat) => {
         setMyChats((prevChats) => [...prevChats, newChat]);
     };
@@ -70,6 +74,8 @@ export default function SideBar({selectChatId}) {
     const handleDeleteChat = (chatId) => {
         setMyChats(myChats.filter(chat => chat.id !== chatId));
     }
+
+
     let tabContent;
     switch (tab) {
         case "MENU":
@@ -99,11 +105,8 @@ export default function SideBar({selectChatId}) {
         case "MY_ACCOUNT":
             tabContent = <AccountBox id={accountId}/>;
             break;
-        case "ACCOUNT":
-            tabContent = <AccountBox id={accountId}/>;
-            break;
         case "ALL_USERS":
-            tabContent = <AllAccounts/>;
+            tabContent = <AllAccounts handleAddContact={handleAddContact}/>;
             break;
         case "LOG":
             tabContent = <AllAccounts/>;

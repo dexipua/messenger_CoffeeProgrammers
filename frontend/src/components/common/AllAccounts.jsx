@@ -40,7 +40,7 @@ const styles = {
     }
 };
 
-const AllAccounts = () => {
+const AllAccounts = ({handleAddContact}) => {
     const [filteredAccounts, setFilteredAccounts] = useState([]);
 
     const [firstName, setFirstName] = useState('');
@@ -97,10 +97,11 @@ const AllAccounts = () => {
         }
     };
 
-    const handleAddContact = async (id) => {
-        await AccountService.addToContact(myId, id)
+    const addContact = async (id) => {
+        const response = await AccountService.addToContact(myId, id)
         setIsSearching(false);
         setUpdate(true);
+        handleAddContact(response)
     };
 
     const handleChange = (event, value) => {
@@ -162,7 +163,7 @@ const AllAccounts = () => {
                             </Typography>
                         </ListItemText>
                     </ListItemButton>
-                    <IconButton size="small" edge="end" onClick={() => handleAddContact(account.id)}>
+                    <IconButton size="small" onClick={() => addContact(account.id)}>
                         <Add/>
                     </IconButton>
                 </ListItem>
