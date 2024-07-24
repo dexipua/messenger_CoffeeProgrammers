@@ -89,6 +89,12 @@ class AccountService {
             () =>
                 apiClient.post(`/${accountId}/addContact/${contactId}`));
     }
+
+    async getAllAccountWithoutContacts(accountId){
+        return await this.handleRequest(
+            () =>
+                apiClient.get(`/notInContactList/${accountId}`));
+    }
 }
 
 export default new AccountService();
