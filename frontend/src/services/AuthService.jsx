@@ -46,12 +46,15 @@ class AuthService {
     }
 
     async reg(username) {
-        return await this.handleRequest(
+        const data = await this.handleRequest(
             () => apiClient.post(`/registration`, {
                 params: {
                     username: username,
                 }
             }));
+
+        Cookies.set('email', username)
+        return data;
     }
 
     async regVer(username, password, code, description, firstName, lastName,) {
@@ -68,11 +71,6 @@ class AuthService {
         Cookies.set('id', data.userId);
         Cookies.set('firstName', data.firstName);
         Cookies.set('lastName', data.lastName);
-
-        console.log(Cookies.get('token'))
-        console.log(Cookies.get('id'))
-        console.log(Cookies.get('firstName'))
-        console.log(Cookies.get('lastName'))
         return data;
     }
 
