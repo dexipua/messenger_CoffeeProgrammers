@@ -42,9 +42,9 @@ const Registration = () => {
         event.preventDefault();
         setLoading(true);
         try {
-            let response =  await AuthService.regValid(email, password,
+             await AuthService.regValid(email, password,
                 0, description, firstName, lastName);
-            response = AuthService.reg(email, password)
+            const response = AuthService.reg(email, password)
             setIsRegister(true);
             console.log('Registration successful:', response);
         } catch (error) {
