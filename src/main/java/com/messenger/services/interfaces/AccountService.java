@@ -1,6 +1,7 @@
 package com.messenger.services.interfaces;
 
 import com.messenger.models.Account;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface AccountService {
     boolean isExistByEmail(String email);
     Account addContact(long id, long contactId);
     Account removeContact(long id, long contactId);
-    Object[] findAccountsNotInContactList(Long accountId, int page, int size);
+    Page<Account> findAccountsNotInContactList(Long accountId, int page, int size);
 }

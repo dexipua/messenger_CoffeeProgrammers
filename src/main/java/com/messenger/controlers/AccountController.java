@@ -4,12 +4,12 @@ package com.messenger.controlers;
 import com.messenger.dto.account.AccountListResponseDTO;
 import com.messenger.dto.account.AccountRequest;
 import com.messenger.dto.account.AccountResponse;
-import com.messenger.dto.account.AccountResponseSimple;
 import com.messenger.mapper.AccountMapper;
 import com.messenger.models.Account;
 import com.messenger.services.interfaces.AccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -36,15 +36,6 @@ public class AccountController {
         return responseDTO;
     }
 
-    @PreAuthorize("@accountSecurity.checkAccount(#auth, #myId)")
-    @GetMapping("/getAllContacts/{my_id}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<AccountResponseSimple> getAllContacts(
-            @PathVariable("my_id") long myId, Authentication auth) {
-        return accountService.findAllContacts(myId).stream()
-                .map(accountMapper::toResponseSimple).toList();
-    }
-
     @PreAuthorize("@accountSecurity.checkAccount(#auth, #id)")
     @PostMapping("/update/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -53,21 +44,6 @@ public class AccountController {
             @PathVariable long id, Authentication auth) {
         return accountMapper.toResponse(accountService.update(
                 accountMapper.toModel(accountRequest), id));
-    }
-
-    @GetMapping("/getAllByName")
-    @ResponseStatus(HttpStatus.OK)
-    public AccountListResponseDTO getAllByName(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam String lastName,
-            @RequestParam String firstName) {
-        AccountListResponseDTO responseDTO = new AccountListResponseDTO();
-        Object[] objects = accountService.findByNames(lastName, firstName, page, size);
-        responseDTO.setList(((List<Account>) objects[0]).stream()
-                .map(accountMapper::toResponseSimple).toList());
-        responseDTO.setPages((int) objects[1] - 1);
-        return responseDTO;
     }
 
     @PreAuthorize("@accountSecurity.checkAccount(#auth, #id)")
@@ -102,10 +78,9 @@ public class AccountController {
             @RequestParam int size,
             Authentication auth) {
         AccountListResponseDTO responseDTO = new AccountListResponseDTO();
-        Object[] objects = accountService.findAccountsNotInContactList(accountId, page, size);
-        responseDTO.setList(((List<Account>) objects[0]).stream()
-                .map(accountMapper::toResponseSimple).toList());
-        responseDTO.setPages((int) objects[1] - 1);
+        Page<Account> pages = accountService.findAccountsNotInContactList(accountId, page, size);
+        responseDTO.setList(pages.stream().map(accountMapper::toResponseSimple).toList());
+        responseDTO.setPages(pages.getTotalPages() - 1);
         return responseDTO;
     }
 }

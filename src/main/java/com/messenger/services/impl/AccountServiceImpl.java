@@ -115,13 +115,10 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public Object[] findAccountsNotInContactList(Long accountId, int page, int size) {
-        Object[] objects = new Object[2];
-        Page<Account> pageR = accountRepository.findAccountsNotInContactList(accountId,
+    public Page<Account> findAccountsNotInContactList(Long accountId, int page, int size) {
+        Page<Account> pages = accountRepository.findAccountsNotInContactList(accountId,
                 PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
-        objects[0] = pageR.toList();
-        objects[1] = pageR.getTotalPages();
-        return objects;
+        return pages;
     }
 
 }
