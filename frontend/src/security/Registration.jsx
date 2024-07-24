@@ -44,7 +44,7 @@ const Registration = () => {
         try {
              await AuthService.regValid(email, password,
                 0, description, firstName, lastName);
-            const response = AuthService.reg(email, password)
+            const response = await AuthService.reg(email, password)
             setIsRegister(true);
             console.log('Registration successful:', response);
         } catch (error) {

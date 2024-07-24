@@ -48,9 +48,7 @@ class AuthService {
     async reg(username) {
         const data = await this.handleRequest(
             () => apiClient.post(`/registration`, {
-                params: {
-                    username: username,
-                }
+                message: username,
             }));
 
         Cookies.set('email', username)
