@@ -2,6 +2,7 @@ package com.messenger.repository;
 
 import com.messenger.models.Account;
 import com.messenger.models.Role;
+import com.messenger.models.Status;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
 class AccountRepositoryTest {
@@ -33,6 +34,7 @@ class AccountRepositoryTest {
         account.setFirstName("First");
         account.setLastName("Last");
         account.setRole(Role.USER);
+        account.setStatus(Status.ONLINE);
         accountRepository.save(account);
 
         //when
@@ -53,6 +55,7 @@ class AccountRepositoryTest {
         account.setFirstName("First");
         account.setLastName("Last");
         account.setRole(Role.USER);
+        account.setStatus(Status.ONLINE);
         accountRepository.save(account);
 
         //then

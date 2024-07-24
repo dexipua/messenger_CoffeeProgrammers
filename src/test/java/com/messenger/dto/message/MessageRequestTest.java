@@ -12,6 +12,8 @@ class MessageRequestTest {
 
         MessageRequest messageRequest2 = new MessageRequest();
         messageRequest2.setText(messageRequest1.getText());
+        messageRequest2.setChatId(messageRequest1.getChatId());
+        messageRequest2.setSenderId(messageRequest1.getSenderId());
 
         assertEquals(messageRequest1, messageRequest2);
         assertEquals(messageRequest1.hashCode(), messageRequest2.hashCode());

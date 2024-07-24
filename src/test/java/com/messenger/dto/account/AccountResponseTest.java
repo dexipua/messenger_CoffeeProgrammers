@@ -14,7 +14,6 @@ class AccountResponseTest {
         AccountResponse accountResponse2 = new AccountResponse();
         accountResponse2.setFirstName(accountResponse1.getFirstName());
         accountResponse2.setLastName(accountResponse1.getLastName());
-        accountResponse2.setAccounts(accountResponse1.getAccounts());
         accountResponse2.setEmail(accountResponse1.getEmail());
         accountResponse2.setRole(accountResponse1.getRole());
         accountResponse2.setId(accountResponse1.getId());

@@ -2,7 +2,7 @@ package com.messenger.models;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -12,9 +12,9 @@ class ChatTest {
     @Test
     void testEquals() {
         // given
-        Chat chat1 = new Chat(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));
-        Chat chat2 = new Chat(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));
-        Chat chat3 = new Chat(3L, null, null);
+        Chat chat1 = new Chat(1L, List.of(new Account()));
+        Chat chat2 = new Chat(1L, List.of(new Account()));
+        Chat chat3 = new Chat(3L, null);
 
         // then
         assertThat(chat1).isEqualTo(chat2);
@@ -26,10 +26,10 @@ class ChatTest {
     @Test
     void testHashCode() {
         // given
-        Chat chat1 = new Chat(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));
-        Chat chat2 = new Chat(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));
+        Chat chat1 = new Chat(1L, List.of(new Account()));
+        Chat chat2 = new Chat(1L, List.of(new Account()));
 
-        Chat chat3 = new Chat(2L, null, null);
+        Chat chat3 = new Chat(2L, null);
 
         // then
         assertThat(chat1.hashCode()).isEqualTo(chat2.hashCode());
@@ -39,10 +39,10 @@ class ChatTest {
     @Test
     void testEqualsAndHashCodeWithCollections() {
         // given
-        Chat chat1 = new Chat(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));
-        Chat chat2 = new Chat(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));
+        Chat chat1 = new Chat(1L, List.of(new Account()));
+        Chat chat2 = new Chat(1L, List.of(new Account()));
 
-        Chat chat3 = new Chat(2L, null, null);
+        Chat chat3 = new Chat(2L, null);
         // then
         assertThat(chat1).isEqualTo(chat2);
         assertThat(chat1.hashCode()).isEqualTo(chat2.hashCode());
@@ -52,7 +52,7 @@ class ChatTest {
     @Test
     void testToString() {
         // given
-        Chat chat = new Chat(1L, null, null);
+        Chat chat = new Chat(1L, null);
 
         // when
         String result = chat.toString();

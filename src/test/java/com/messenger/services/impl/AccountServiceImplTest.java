@@ -1,7 +1,9 @@
 package com.messenger.services.impl;
 
 import com.messenger.models.Account;
+import com.messenger.models.Contact;
 import com.messenger.repository.AccountRepository;
+import com.messenger.services.interfaces.ContactService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.instancio.Instancio;
@@ -17,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 import java.util.Optional;
 
-import static org.instancio.Select.field;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,6 +30,8 @@ class AccountServiceImplTest {
     private AccountRepository accountRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private ContactService contactService;
     @InjectMocks
     private AccountServiceImpl accountService;
 
@@ -37,8 +40,6 @@ class AccountServiceImplTest {
     @BeforeEach
     void setUp() {
         account = Instancio.of(Account.class)
-                .ignore(field(Account.class, "chats"))
-                .ignore(field(Account.class, "accounts"))
                 .create();
     }
 
@@ -46,7 +47,7 @@ class AccountServiceImplTest {
     void create() {
         // when
         when(accountRepository.findByEmail(account.getEmail())).thenReturn(Optional.empty());
-
+        when(contactService.create(any(Contact.class))).thenReturn(Instancio.create(Contact.class));
         // then
         accountService.create(account);
         ArgumentCaptor<Account> argumentCaptor = ArgumentCaptor.forClass(Account.class);
@@ -83,7 +84,7 @@ class AccountServiceImplTest {
     @Test
     void getAll() {
         when(accountRepository.findAll()).thenReturn(List.of(account));
-        assertEquals(List.of(account), accountService.getAll());
+        assertEquals(List.of(account), accountService.findAll());
         verify(accountRepository, times(1)).findAll();
     }
 
