@@ -17,7 +17,12 @@ const tabs = [
     {
         key: "CONTACTS",
         label: "Contacts",
-    }
+    },
+    {
+        key: "ALL_USERS",
+        label: "All users",
+    },
+
 ];
 
 

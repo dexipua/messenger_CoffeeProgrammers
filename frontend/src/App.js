@@ -1,6 +1,6 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Main from "./pages/Main";
-import AllAccounts from "./pages/AllAccounts";
+import AllAccounts from "./components/common/AllAccounts";
 import Login from "./security/Login";
 import Registration from "./security/Registration";
 import PrivateRoute from "./security/PrivateRoute";

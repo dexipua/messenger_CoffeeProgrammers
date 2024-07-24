@@ -15,6 +15,8 @@ import IconButton from "@mui/material/IconButton";
 import TabsMenu from "../common/TabsMenu";
 import AccountBox from "../common/account/AccountBox";
 import Cookies from "js-cookie";
+import AllAccounts from "../common/AllAccounts";
+import LogoutButton from "./LogoutButton";
 
 const drawerWidth = 260;
 
@@ -71,7 +73,12 @@ export default function SideBar({selectChatId}) {
     let tabContent;
     switch (tab) {
         case "MENU":
-            tabContent = <TabsMenu selectTab={setTab}/>;
+            tabContent =
+                <>
+                    <TabsMenu selectTab={setTab}/>
+                    <Divider/>
+                    <LogoutButton/>
+                </>
             break;
         case "CHATS":
             tabContent =
@@ -94,6 +101,12 @@ export default function SideBar({selectChatId}) {
             break;
         case "ACCOUNT":
             tabContent = <AccountBox id={accountId}/>;
+            break;
+        case "ALL_USERS":
+            tabContent = <AllAccounts/>;
+            break;
+        case "LOG":
+            tabContent = <AllAccounts/>;
             break;
         default:
             tabContent = <div>Something went wrong</div>

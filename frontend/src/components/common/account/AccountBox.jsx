@@ -7,6 +7,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import MyAvatar from "../../layouts/MyAvatar";
 import DeleteButton from "../../layouts/delete/DeleteButton";
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+import LogoutButton from "../../layouts/LogoutButton";
 
 const AccountBox = ({id, handleDelete, selectContactId, writeToContact}) => {
     const myId = Cookies.get("id")
@@ -106,6 +107,7 @@ const AccountBox = ({id, handleDelete, selectContactId, writeToContact}) => {
                             <IconButton onClick={toggleEditMode} size="small">
                                 {isEditing ? <CancelIcon/> : <EditIcon/>}
                             </IconButton>
+                            <LogoutButton />
                         </>
                     ) : (
                         <>
