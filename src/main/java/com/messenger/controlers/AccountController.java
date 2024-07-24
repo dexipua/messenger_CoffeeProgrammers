@@ -4,6 +4,7 @@ package com.messenger.controlers;
 import com.messenger.dto.account.AccountListResponseDTO;
 import com.messenger.dto.account.AccountRequest;
 import com.messenger.dto.account.AccountResponse;
+import com.messenger.dto.account.AccountResponseSimple;
 import com.messenger.mapper.AccountMapper;
 import com.messenger.models.Account;
 import com.messenger.services.interfaces.AccountService;
@@ -23,18 +24,6 @@ import java.util.List;
 public class AccountController {
     private final AccountService accountService;
     private final AccountMapper accountMapper;
-
-    @GetMapping("/getAll")
-    @ResponseStatus(HttpStatus.OK)
-    public AccountListResponseDTO getAll(@RequestParam(value = "page", defaultValue = "0") int page,
-                                         @RequestParam(value = "size", defaultValue = "10") int size) {
-        AccountListResponseDTO responseDTO = new AccountListResponseDTO();
-        Object[] objects = accountService.findAll(page, size);
-        responseDTO.setList(((List<Account>) objects[0]).stream()
-                .map(accountMapper::toResponseSimple).toList());
-        responseDTO.setPages((int) objects[1] - 1);
-        return responseDTO;
-    }
 
     @PreAuthorize("@accountSecurity.checkAccount(#auth, #id)")
     @PostMapping("/update/{id}")
@@ -69,7 +58,7 @@ public class AccountController {
         return accountMapper.toResponse(accountService.findById(id));
     }
 
-    @PreAuthorize("@accountSecurity.checkAccount(#auth, #id)")
+    @PreAuthorize("@accountSecurity.checkAccount(#auth, #accountId)")
     @GetMapping("/notInContactList/{accountId}")
     @ResponseStatus(HttpStatus.OK)
     public AccountListResponseDTO findAccountsNotInContactList(
@@ -82,5 +71,32 @@ public class AccountController {
         responseDTO.setList(pages.stream().map(accountMapper::toResponseSimple).toList());
         responseDTO.setPages(pages.getTotalPages() - 1);
         return responseDTO;
+    }
+
+    @PreAuthorize("@accountSecurity.checkAccount(#auth, #accountId)")
+    @GetMapping("/notInContactListWithSearch/{accountId}")
+    @ResponseStatus(HttpStatus.OK)
+    public AccountListResponseDTO findAccountsNotInContactListWithSearch(
+            @PathVariable Long accountId,
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam String firstName,
+            @RequestParam String lastName,
+            Authentication auth) {
+        AccountListResponseDTO responseDTO = new AccountListResponseDTO();
+        Page<Account> pages = accountService.findAccountsNotInContactListAndSearchByNamesIgnoreCase
+                (accountId, page, size, firstName, lastName);
+        responseDTO.setList(pages.stream().map(accountMapper::toResponseSimple).toList());
+        responseDTO.setPages(pages.getTotalPages() - 1);
+        return responseDTO;
+    }
+
+    @PreAuthorize("@accountSecurity.checkAccount(#auth, #myId)")
+    @GetMapping("/getAllContacts/{my_id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AccountResponseSimple> getAllContacts(
+            @PathVariable("my_id") long myId, Authentication auth) {
+        return accountService.findAllContacts(myId).stream()
+                .map(accountMapper::toResponseSimple).toList();
     }
 }

@@ -3,7 +3,6 @@ package com.messenger.services.impl;
 import com.messenger.models.Account;
 import com.messenger.models.Contact;
 import com.messenger.repository.AccountRepository;
-import com.messenger.repository.ContactRepository;
 import com.messenger.services.interfaces.AccountService;
 import com.messenger.services.interfaces.ContactService;
 import jakarta.persistence.EntityExistsException;
@@ -27,7 +26,6 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final ContactService contactService;
-    private final ContactRepository contactRepository;
 
 
     @Override
@@ -48,13 +46,9 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public Object[] findAll(int page, int size) {
-        Object[] objects = new Object[2];
-        Page<Account> pageR = accountRepository.findAll(PageRequest.of(page, size,
-                Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
-        objects[0] = pageR.toList();
-        objects[1] = pageR.getTotalPages();
-        return objects;
+    public List<Account> findAllContacts(long id){
+        return findById(id).getContacts().stream().map(
+                a -> findById(a.getId())).toList();
     }
 
     @Override
@@ -65,30 +59,12 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public List<Account> findAllContacts(long id){
-        return findById(id).getContacts().stream().map(
-                a -> findById(a.getId())
-        ).toList();
-    }
-
-    @Override
     public Account update(Account account, long id) {
         Account old = findById(id);
         old.setDescription(account.getDescription());
         old.setFirstName(account.getFirstName());
         old.setLastName(account.getLastName());
         return accountRepository.save(old);
-    }
-
-    @Override
-    public Object[] findByNames(String lastName, String firstName, int page, int size) {
-        Object[] objects = new Object[2];
-        Page<Account> pageR = accountRepository.findAllByLastNameContainsAndFirstNameContains(
-                lastName, firstName, PageRequest.of(page, size,
-                        Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
-        objects[0] = pageR.toList();
-        objects[1] = pageR.getTotalPages();
-        return objects;
     }
 
     @Override
@@ -116,9 +92,15 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public Page<Account> findAccountsNotInContactList(Long accountId, int page, int size) {
-        Page<Account> pages = accountRepository.findAccountsNotInContactList(accountId,
+        return accountRepository.findAccountsNotInContactList(accountId,
                 PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
-        return pages;
     }
 
+    @Override
+    public Page<Account> findAccountsNotInContactListAndSearchByNamesIgnoreCase(
+            Long accountId, int page, int size, String firstName, String lastName) {
+        return accountRepository.findByFirstNameAndLastNameExcludingId(
+                firstName, lastName, accountId, PageRequest.of(page, size,
+                        Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
+    }
 }

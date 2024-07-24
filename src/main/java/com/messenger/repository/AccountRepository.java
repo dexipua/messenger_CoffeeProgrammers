@@ -11,15 +11,14 @@ import java.util.Optional;
 
 public interface AccountRepository extends JpaRepository<Account, Long>{
     Optional<Account> findByEmail(String email);
-    Page<Account> findAllByLastNameContainsAndFirstNameContains
-            (String lastName, String firstName, PageRequest page);
     boolean existsByEmail(String email);
 
     @Query("SELECT a FROM Account a WHERE a.id != :accountId AND a.id NOT IN " +
             "(SELECT ac.id FROM Account acc JOIN acc.contacts ac WHERE acc.id = :accountId)")
     Page<Account> findAccountsNotInContactList(@Param("accountId") Long accountId, PageRequest pageRequest);
 
-    @Query("SELECT a FROM Account a WHERE a.id <> :excludedId AND a.firstName LIKE %:firstName% AND a.lastName LIKE %:lastName%")
+    @Query("SELECT a FROM Account a WHERE LOWER(a.firstName) LIKE LOWER(CONCAT('%', :firstName, '%')) " +        "AND LOWER(a.lastName) LIKE LOWER(CONCAT('%', :lastName, '%')) " +
+            "AND a.id <> :excludedId")
     Page<Account> findByFirstNameAndLastNameExcludingId(@Param("firstName") String firstName,
                                                         @Param("lastName") String lastName,
                                                         @Param("excludedId") Long excludedId,

@@ -30,34 +30,10 @@ class AccountService {
         }
     }
 
-    async getAll(page, size) {
-        return await this.handleRequest(
-            () => apiClient.get(`/getAll`, {
-                params: {
-                    page: page,
-                    size: size
-                }
-            }));
-    }
-
     async getAllContacts() {
         const userId = Cookies.get('id');
         return await this.handleRequest(
             () => apiClient.get(`/getAllContacts/${userId}`));
-    }
-
-    async getAllByName(firstName, lastName,
-                       page, size) {
-        return await this.handleRequest(
-            () =>
-                apiClient.get(`/getAllByName`, {
-                    params: {
-                        firstName: firstName,
-                        lastName: lastName,
-                        page: page,
-                        size: size
-                    }
-                }));
     }
 
     async getById(id) {
@@ -97,6 +73,19 @@ class AccountService {
                     params: {
                         page: page,
                         size: size
+                    }
+                }));
+    }
+
+    async getAllAccountWithoutContactsWithSearch(accountId, page, size, firstName, lastName){
+        return await this.handleRequest(
+            () =>
+                apiClient.get(`/notInContactListWithSearch/${accountId}`,  {
+                    params: {
+                        page: page,
+                        size: size,
+                        firstName: firstName,
+                        lastName: lastName
                     }
                 }));
     }

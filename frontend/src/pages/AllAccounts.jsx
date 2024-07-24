@@ -14,13 +14,17 @@ const AllAccounts = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const myId = Cookies.get('id')
+    const myId = Cookies.get('id');
+    const [isSearching, setIsSearching] = useState(false);
+    const size = 1;
+    const [update, setUpdate] = useState(false)
 
     useEffect(() => {
+        setUpdate(false)
         const getData = async () => {
             try {
-                const response = await AccountService.getAllAccountWithoutContacts(myId, page, 2);
-                console.log(response)
+                const response = await AccountService.getAllAccountWithoutContacts(myId, page, size);
+                console.log(response);
                 setAccounts(response.list);
                 setFilteredAccounts(response.list);
                 setTotalPages(response.pages);
@@ -31,22 +35,23 @@ const AllAccounts = () => {
             }
         };
 
-        getData();
-    }, [page]);
+        if (isSearching) {
+            handleSearch();
+        } else {
+            getData();
+        }
+    }, [page, isSearching, update]);
 
     const handleSearch = async () => {
-        setPage(0);
+        if (!isSearching) {
+            setPage(0);
+        }
         setLoading(true);
-        // if (firstName || lastName) {
-        //     const response =
-        //     setFilteredUsers(response);
-        //     setFirstName('');
-        //     setLastName('')
-        // } else {
-        //     setFilteredUsers(users);
-        // }
         try {
-            const response = await AccountService.getAllByName(firstName, lastName, 0, 2);
+            const response = await AccountService.getAllAccountWithoutContactsWithSearch(
+                myId, page, size, firstName, lastName);
+            console.log(response);
+            setIsSearching(true);
             setFilteredAccounts(response.list);
             setTotalPages(response.pages);
         } catch (error) {
@@ -56,13 +61,15 @@ const AllAccounts = () => {
         }
     };
 
+    const handleAddContact = (id) => {
+        setIsSearching(false)
+        setPage(0)
+        setUpdate(true)
+    };
+
     const handleChange = (event, value) => {
         setPage(value - 1);
     };
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
 
     if (error) {
         return <p>Error: {error}</p>;
@@ -77,6 +84,10 @@ const AllAccounts = () => {
                 lastName={lastName}
                 setLastName={setLastName}
                 handleSearch={handleSearch}
+                setLoading={setLoading}
+                setError={setError}
+                myId={myId}
+                handleAddContact={handleAddContact}
             />
             <PaginationComponent
                 currentPage={page + 1}
