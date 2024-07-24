@@ -19,8 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -100,5 +99,41 @@ class AccountServiceImplTest {
         when(accountRepository.findById(account.getId())).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> accountService.findById(account.getId()));
         verify(accountRepository, times(1)).findById(account.getId());
+    }
+
+    @Test
+    void findAllContacts() {
+        Account account1 = Instancio.create(Account.class);
+        account1.setId(10L);
+        account.setContacts(List.of(new Contact(1L, account1.getId())));
+        when(accountRepository.findById(account.getId())).thenReturn(Optional.of(account));
+        when(accountRepository.findById(1L)).thenReturn(Optional.of(account1));
+        assertEquals(List.of(account1), accountService.findAllContacts(account.getId()));
+        verify(accountRepository, times(1)).findById(1L);
+        verify(accountRepository, times(1)).findById(account.getId());
+    }
+
+    @Test
+    void update() {
+        Account account1 = Instancio.create(Account.class);
+        when(accountRepository.save(any(Account.class))).thenReturn(account1);
+        when(accountRepository.findById(account.getId())).thenReturn(Optional.of(account));
+        assertEquals(account1, accountService.update(account1, account.getId()));
+        verify(accountRepository, times(1)).save(any(Account.class));
+        verify(accountRepository, times(1)).findById(account.getId());
+    }
+
+    @Test
+    void findAllByNames() {
+        when(accountRepository.findAllByLastNameContainsAndFirstNameContains(account.getLastName(), account.getFirstName())).thenReturn(List.of(account));
+        assertEquals(List.of(account), accountService.findByNames(account.getLastName(), account.getFirstName()));
+        verify(accountRepository, times(1)).findAllByLastNameContainsAndFirstNameContains(account.getLastName(), account.getFirstName());
+    }
+
+    @Test
+    void existsByEmail() {
+        when(accountRepository.existsByEmail(account.getEmail())).thenReturn(true);
+        assertTrue(accountService.isExistByEmail(account.getEmail()));
+        verify(accountRepository, times(1)).existsByEmail(account.getEmail());
     }
 }

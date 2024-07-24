@@ -12,6 +12,8 @@ class ExceptionResponseTest {
         ExceptionResponse exceptionResponse1 = Instancio.create(ExceptionResponse.class);
 
         ExceptionResponse exceptionResponse2 = new ExceptionResponse(exceptionResponse1.getMessages());
+        ExceptionResponse exceptionResponse3 = new ExceptionResponse(exceptionResponse2.getMessages().get(0));
+        exceptionResponse3.setMessages(exceptionResponse1.getMessages());
 
         assertEquals(exceptionResponse1, exceptionResponse2);
         assertEquals(exceptionResponse1.hashCode(), exceptionResponse2.hashCode());
