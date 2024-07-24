@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class VerificationCodeServiceImpl implements VerificationCodeService {
@@ -30,17 +32,16 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
 
     @Override
     public boolean verification(String email, String code) {
-        return true;
-//        VerificationCode verificationCode = findByEmail(email);
-//        if (verificationCode.getExpiryDate().isAfter(LocalDateTime.now())) {
-//            if (verificationCode.getCode().equals(code)) {
-//                return true;
-//            } else {
-//                throw new UnsupportedOperationException("Wrong verification code");
-//            }
-//        } else {
-//            throw new UnsupportedOperationException("Verification code for this email is already expired");
-//        }
+        VerificationCode verificationCode = findByEmail(email);
+        if (verificationCode.getExpiryDate().isAfter(LocalDateTime.now())) {
+            if (verificationCode.getCode().equals(code)) {
+                return true;
+            } else {
+                throw new UnsupportedOperationException("Wrong verification code");
+            }
+        } else {
+            throw new UnsupportedOperationException("Verification code for this email is already expired");
+        }
     }
 
     @Override
