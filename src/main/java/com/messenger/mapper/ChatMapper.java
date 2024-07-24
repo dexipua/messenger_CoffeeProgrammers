@@ -4,7 +4,7 @@ import com.messenger.dto.chat.ChatResponse;
 import com.messenger.models.Chat;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "chatMapper")
+@Mapper
 public interface ChatMapper {
     ChatResponse toResponse(Chat chat);
 }

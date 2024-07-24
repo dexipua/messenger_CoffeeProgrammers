@@ -6,6 +6,7 @@ create table accounts
     password varchar(255) not null,
     last_name varchar(255) not null,
     first_name varchar(255) not null,
-    description varchar(70) not null,
+    description varchar(70),
+    status smallint not null,
     primary key (id)
 )

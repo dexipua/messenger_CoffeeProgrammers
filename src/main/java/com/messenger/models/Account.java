@@ -40,34 +40,27 @@ public class Account implements UserDetails {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "status")
-    private String status;
+    @Column(name = "status", nullable = false)
+    private Status status;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "accounts_contact",
+            name = "account_contact",
             joinColumns = @JoinColumn(name = "my_account_id"),
-            inverseJoinColumns = @JoinColumn(name = "account_id")
+            inverseJoinColumns = @JoinColumn(name = "contact_id")
     )
-    private List<Account> accounts = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "account_chat",
-            joinColumns = @JoinColumn(name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "chat_id")
-    )
-    private List<Chat> chats = new ArrayList<>();
+    private List<Contact> contacts = new ArrayList<>();
 
     public Account(String password,
-                   String email, String role, String firstName,
+                   String email, String firstName,
                    String lastName, String description) {
         this.password = password;
         this.email = email;
-        this.role = Role.valueOf(role);
+        this.role = Role.USER;
         this.firstName = firstName;
         this.lastName = lastName;
         this.description = description;
+        this.status = Status.OFFLINE;
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
