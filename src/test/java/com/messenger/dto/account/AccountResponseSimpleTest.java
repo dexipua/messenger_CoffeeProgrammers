@@ -16,6 +16,7 @@ class AccountResponseSimpleTest {
         accountResponseSimple2.setLastName(accountResponseSimple1.getLastName());
         accountResponseSimple2.setEmail(accountResponseSimple1.getEmail());
         accountResponseSimple2.setId(accountResponseSimple1.getId());
+        accountResponseSimple2.setStatus(accountResponseSimple1.getStatus());
 
         assertEquals(accountResponseSimple1, accountResponseSimple2);
         assertEquals(accountResponseSimple1.hashCode(), accountResponseSimple2.hashCode());

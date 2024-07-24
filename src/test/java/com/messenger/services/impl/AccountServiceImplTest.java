@@ -14,8 +14,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,9 +86,12 @@ class AccountServiceImplTest {
 
     @Test
     void getAll() {
-        when(accountRepository.findAll()).thenReturn(List.of(account));
-        assertEquals(List.of(account), accountService.findAll());
-        verify(accountRepository, times(1)).findAll();
+        when(accountRepository.findAll(PageRequest.of(0, 10,
+                Sort.by(Sort.Direction.ASC, "lastName", "firstName")))).thenReturn(new PageImpl<>(List.of(account)));
+        assertEquals(new PageImpl<>(List.of(account)).toList(), accountService.findAll(0, 10)[0]);
+        assertEquals(new PageImpl<>(List.of(account)).getTotalPages(), accountService.findAll(0, 10)[1]);
+        verify(accountRepository, times(2)).findAll(PageRequest.of(0, 10,
+                Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
     }
 
     @Test
@@ -125,9 +132,10 @@ class AccountServiceImplTest {
 
     @Test
     void findAllByNames() {
-        when(accountRepository.findAllByLastNameContainsAndFirstNameContains(account.getLastName(), account.getFirstName())).thenReturn(List.of(account));
-        assertEquals(List.of(account), accountService.findByNames(account.getLastName(), account.getFirstName()));
-        verify(accountRepository, times(1)).findAllByLastNameContainsAndFirstNameContains(account.getLastName(), account.getFirstName());
+        when(accountRepository.findAllByLastNameContainsAndFirstNameContains(account.getLastName(), account.getFirstName(), PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "lastName", "firstName")))).thenReturn(new PageImpl<>(List.of(account)));
+        assertEquals(new PageImpl<>(List.of(account)).toList(), accountService.findByNames(account.getLastName(), account.getFirstName(), 0, 10)[0]);
+        assertEquals(new PageImpl<>(List.of(account)).getTotalPages(), accountService.findByNames(account.getLastName(), account.getFirstName(), 0, 10)[1]);
+        verify(accountRepository, times(2)).findAllByLastNameContainsAndFirstNameContains(account.getLastName(), account.getFirstName(), PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
     }
 
     @Test
@@ -135,5 +143,38 @@ class AccountServiceImplTest {
         when(accountRepository.existsByEmail(account.getEmail())).thenReturn(true);
         assertTrue(accountService.isExistByEmail(account.getEmail()));
         verify(accountRepository, times(1)).existsByEmail(account.getEmail());
+    }
+
+    @Test
+    void addContact() {
+        account.setContacts(new ArrayList<>());
+        Account account1 = new Account();
+        account1.setContacts(List.of(Instancio.create(Contact.class)));
+        when(accountRepository.findById(account.getId())).thenReturn(Optional.of(account));
+        when(contactService.findById(2L)).thenReturn(account1.getContacts().get(0));
+        when(accountRepository.save(any(Account.class))).thenReturn(account1);
+        assertEquals(account1.getContacts().size(), accountService.addContact(account.getId(), 2L).getContacts().size());
+        verify(accountRepository, times(1)).findById(account.getId());
+        verify(contactService, times(1)).findById(2L);
+    }
+
+    @Test
+    void removeContact() {
+        account.setContacts(new ArrayList<>(List.of(Instancio.create(Contact.class))));
+        Account account1 = new Account();
+        when(accountRepository.findById(account.getId())).thenReturn(Optional.of(account));
+        when(contactService.findById(2L)).thenReturn(account.getContacts().get(0));
+        when(accountRepository.save(any(Account.class))).thenReturn(account1);
+        assertEquals(account1.getContacts().size(), accountService.removeContact(account.getId(), 2L).getContacts().size());
+        verify(accountRepository, times(1)).findById(account.getId());
+        verify(contactService, times(1)).findById(2L);
+    }
+
+    @Test
+    void findAccountsNotInContactList() {
+        List<Account> expected = Instancio.createList(Account.class);
+        when(accountRepository.findAccountsNotInContactList(account.getId(), PageRequest.of(0, 10))).thenReturn(new PageImpl<>(expected));
+        assertEquals(expected, accountService.findAccountsNotInContactList(account.getId(), 0, 10));
+        verify(accountRepository, times(1)).findAccountsNotInContactList(account.getId(), PageRequest.of(0, 10));
     }
 }

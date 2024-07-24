@@ -76,6 +76,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     @Override
     public Account addContact(long id, long contactId){
         Account account = findById(id);
+
         account.getContacts().add(contactService.findByAccountId(contactId));
         Account toAdd = findById(contactService.findByAccountId(contactId).getAccountId());
         return accountRepository.save(toAdd);}
@@ -84,7 +85,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     public Account removeContact(long id, long contactId){
         Account account = findById(id);
 
-        account.getContacts().remove(contactService.findByAccountId(contactId));
+        account.getContacts().remove(contactService.findById(contactId));
 
         return accountRepository.save(account);
     }
