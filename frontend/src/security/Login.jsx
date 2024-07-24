@@ -24,9 +24,9 @@ const mainBoxStyles = {
 }
 
 const Login = () => {
-    const [email, setEmail] = useState('am@gmail.com');
-    const [password, setPassword] = useState('passWord1');
-    const [code, setCode] = useState('12')
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [code, setCode] = useState('')
 
     const [isLogin, setIsLogin] = useState(false)
 
