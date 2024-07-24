@@ -5,8 +5,10 @@ import Cookies from "js-cookie";
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import MyAvatar from "../../layouts/MyAvatar";
+import DeleteButton from "../../layouts/delete/DeleteButton";
 
-const AccountBox = ({id}) => {
+const AccountBox = ({id, handleDelete, selectContactId}) => {
+    const myId = Cookies.get("id")
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -51,7 +53,7 @@ const AccountBox = ({id}) => {
         setNewFirstName(firstName);
         setNewLastName(lastName);
         setNewDescription(description);
-        setIsEditing(false); // Вийти з режиму редагування
+        setIsEditing(false);
     };
 
     const handleConfirmUpdate = async () => {
@@ -65,9 +67,19 @@ const AccountBox = ({id}) => {
             setFirstName(response.firstName);
             setLastName(response.lastName);
             setDescription(response.description);
-            setIsEditing(false); // Вийти з режиму редагування
+            setIsEditing(false);
         } catch (error) {
             setError(error.message);
+        }
+    };
+
+    const removeContact = async () => {
+        try {
+            await AccountService.removeFromContact(myId, id);
+            handleDelete(id)
+            selectContactId(null)
+        } catch (error) {
+            console.error("Failed to remove contact:", error);
         }
     };
 
@@ -88,13 +100,25 @@ const AccountBox = ({id}) => {
             <ListItem>
                 <Box display="flex" alignItems="center" gap={1} mb={-1}>
                     <MyAvatar name={firstName + " " + lastName}/>
-                    {isMyAccount &&
+                    {isMyAccount ? (
                         <>
                             <IconButton onClick={toggleEditMode} size="small">
                                 {isEditing ? <CancelIcon/> : <EditIcon/>}
                             </IconButton>
                         </>
-                    }
+                    ) : (
+                        <>
+                            <IconButton size="small">
+                                <DeleteButton
+                                    text={"Are you sure you want to delete this contact?"}
+                                    deleteFunction={() => removeContact()}
+                                />
+                            </IconButton>
+                            <IconButton size="small">
+
+                            </IconButton>
+                        </>
+                    )}
                 </Box>
             </ListItem>
             <ListItem>

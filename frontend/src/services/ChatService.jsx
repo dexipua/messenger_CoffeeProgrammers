@@ -33,12 +33,12 @@ class ChatService {
     async getAllByUserId() {
         const userId = Cookies.get('id');
         return await this.handleRequest(
-            () => apiClient.get(`${API_URL}/findByAccountId/${userId}`));
+            () => apiClient.get(`/findByAccountId/${userId}`));
     }
 
     async delete(id) {
         return await this.handleRequest(
-            () => apiClient.delete(`${API_URL}/findByAccountId/${id}`));
+            () => apiClient.delete(`/findByAccountId/${id}`));
     }
 
     async create(firstAccountId, secondAccountId, name) {
@@ -50,12 +50,12 @@ class ChatService {
 
     async getById(id) {
         return await this.handleRequest(
-            () => apiClient.get(`${API_URL}/findById/${id}`))
+            () => apiClient.get(`/findById/${id}`))
     }
 
-    async getByAccountIds(first_id, second_id){
+    async getByAccountIds(first_id, second_id) {
         return await this.handleRequest(
-            () => apiClient.get(`${API_URL}/exists/${first_id}/${second_id}`))
+            () => apiClient.get(`/exists/${first_id}/${second_id}`))
     }
 }
 

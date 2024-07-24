@@ -21,7 +21,7 @@ class AuthService {
 
     async login(username, password) {
         return await this.handleRequest(
-            () => apiClient.post(`${API_URL}/login`, {
+            () => apiClient.post(`/login`, {
                 params: {
                     username: username
                 }
@@ -30,7 +30,7 @@ class AuthService {
 
     async logVer(username, password, code) {
         const data = await this.handleRequest(
-            () => apiClient.post(`${API_URL}/verification/login`, {
+            () => apiClient.post(`/verification/login`, {
                 username: username,
                 password: password,
                 code: code
@@ -49,7 +49,7 @@ class AuthService {
 
     async reg(username, password) {
         return await this.handleRequest(
-            () => apiClient.post(`${API_URL}/login`, {
+            () => apiClient.post(`/login`, {
                 params: {
                     username: username,
                 }
@@ -58,7 +58,7 @@ class AuthService {
 
     async regVer(username, password, code, description, firstName, lastName,) {
         const data = await this.handleRequest(
-            () => apiClient.post(`${API_URL}/verification/regis`, {
+            () => apiClient.post(`/verification/regis`, {
                 params: {
                     description: description,
                     firstName: firstName,
@@ -83,7 +83,7 @@ class AuthService {
     async check(){
         const token = Cookies.get('token')
         return await this.handleRequest(
-            () => apiClient.get(`${API_URL}/check`, {
+            () => apiClient.get(`/check`, {
                 message: token
             }));
     }
@@ -91,7 +91,7 @@ class AuthService {
     async refresh(){
         const token = Cookies.get('token')
         const data =  await this.handleRequest(
-            () => apiClient.get(`${API_URL}/refresh`, {
+            () => apiClient.get(`/refresh`, {
                 message: token
             }));
         Cookies.set('token', data.token)

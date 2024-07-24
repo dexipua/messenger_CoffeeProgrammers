@@ -32,7 +32,7 @@ class AccountService {
 
     async getAll(page, size) {
         return await this.handleRequest(
-            () => apiClient.get(`${API_URL}/getAll`, {
+            () => apiClient.get(`/getAll`, {
                 params: {
                     page: page,
                     size: size
@@ -43,14 +43,14 @@ class AccountService {
     async getAllContacts() {
         const userId = Cookies.get('id');
         return await this.handleRequest(
-            () => apiClient.get(`${API_URL}/getAllContacts/${userId}`));
+            () => apiClient.get(`/getAllContacts/${userId}`));
     }
 
     async getAllByName(firstName, lastName,
                        page, size) {
         return await this.handleRequest(
             () =>
-                apiClient.get(`${API_URL}/getAllByName`, {
+                apiClient.get(`/getAllByName`, {
                     params: {
                         firstName: firstName,
                         lastName: lastName,
@@ -63,7 +63,7 @@ class AccountService {
     async getById(id) {
         return await this.handleRequest(
             () =>
-                apiClient.get(`${API_URL}/getById/${id}`));
+                apiClient.get(`/getById/${id}`));
     }
 
     async update(firstName, lastName, description) {
@@ -76,6 +76,18 @@ class AccountService {
                     description: description
                 }
             ));
+    }
+
+    async removeFromContact(accountId, contactId) {
+        return await this.handleRequest(
+            () =>
+                apiClient.delete(`/${accountId}/removeContact/${contactId}`));
+    }
+
+    async addToContact(accountId, contactId){
+        return await this.handleRequest(
+            () =>
+                apiClient.post(`/${accountId}/addContact/${contactId}`));
     }
 }
 

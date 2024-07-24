@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "chats")
 @NoArgsConstructor
 @AllArgsConstructor
