@@ -1,10 +1,10 @@
 package com.messenger.services.impl;
 
+import com.messenger.dto.account.AccountResponseSimple;
+import com.messenger.mapper.AccountMapper;
 import com.messenger.models.Account;
-import com.messenger.models.Contact;
 import com.messenger.repository.AccountRepository;
 import com.messenger.services.interfaces.AccountService;
-import com.messenger.services.interfaces.ContactService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
