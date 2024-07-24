@@ -130,8 +130,9 @@ export default function SideBar({selectChatId}) {
             <CustomAppBar/>
             <Drawer sx={drawerStyles} variant="permanent" anchor="left">
                 <Toolbar>
-                    <IconButton edge="start"
-                                onClick={() => setTab("MENU")}
+                    <IconButton
+                        edge="start"
+                        onClick={() => setTab("MENU")}
                     >
                         <MenuRoundedIcon/>
                     </IconButton>
