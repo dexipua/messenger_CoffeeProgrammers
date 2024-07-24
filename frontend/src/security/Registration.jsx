@@ -42,16 +42,13 @@ const Registration = () => {
         event.preventDefault();
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:8080/auth/registration', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email }),
-            });
-            const data = await response.json();
+            let response =  await AuthService.regValid(email, password,
+                0, description, firstName, lastName);
+            response = AuthService.reg(email, password)
             setIsRegister(true);
-            console.log('Registration successful:', data);
+            console.log('Registration successful:', response);
         } catch (error) {
-            setError(error.message);
+            setError(error.response.data.messages);
         } finally {
             setLoading(false);
         }
@@ -73,14 +70,13 @@ const Registration = () => {
             console.log('Verification successful:', response);
             navigate('/')
         } catch (error) {
-            setError(error.message);
+            setError(error.response.data.messages);
         } finally {
             setLoading(false);
         }
     };
 
     if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
 
     return (
         <Box sx={mainBoxStyles}>
@@ -105,6 +101,11 @@ const Registration = () => {
                             required
                             fullWidth
                         />
+                        {!error ? "" : error.map(er =>
+                            <Typography variant="body2" color="textSecondary" align="center">
+                                {er}
+                            </Typography>
+                        )}
                         <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
                             Verify Code
                         </Button>
@@ -160,6 +161,11 @@ const Registration = () => {
                             multiline
                             maxRows={3}
                         />
+                        {!error ? "" : error.map(er =>
+                            <Typography variant="body2" color="textSecondary" align="center">
+                                {er}
+                            </Typography>
+                        )}
                         <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
                             Register
                         </Button>
