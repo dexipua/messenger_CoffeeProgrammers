@@ -1,14 +1,15 @@
 package com.messenger.controlers;
 
 
+import com.messenger.dto.account.AccountRequest;
+import com.messenger.dto.account.AccountResponse;
 import com.messenger.dto.account.AccountResponseSimple;
+import com.messenger.mapper.AccountMapper;
 import com.messenger.services.interfaces.AccountService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
+    private final AccountMapper accountMapper;
 
     @GetMapping("/getAll")
     @ResponseStatus(HttpStatus.OK)
