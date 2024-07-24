@@ -12,9 +12,9 @@ class ChatTest {
     @Test
     void testEquals() {
         // given
-        Chat chat1 = new Chat(1L, List.of(new Account()));
-        Chat chat2 = new Chat(1L, List.of(new Account()));
-        Chat chat3 = new Chat(3L, null);
+        Chat chat1 = new Chat(1L, "ffdsgdsfsdsfd", List.of(new Account()));
+        Chat chat2 = new Chat(1L, "ffdsgdsfsdsfd", List.of(new Account()));
+        Chat chat3 = new Chat(3L,"sfddssfd", null);
 
         // then
         assertThat(chat1).isEqualTo(chat2);
@@ -26,10 +26,10 @@ class ChatTest {
     @Test
     void testHashCode() {
         // given
-        Chat chat1 = new Chat(1L, List.of(new Account()));
-        Chat chat2 = new Chat(1L, List.of(new Account()));
+        Chat chat1 = new Chat(1L, "adadadad", List.of(new Account()));
+        Chat chat2 = new Chat(1L, "adadadad", List.of(new Account()));
 
-        Chat chat3 = new Chat(2L, null);
+        Chat chat3 = new Chat(2L, "adadadad", null);
 
         // then
         assertThat(chat1.hashCode()).isEqualTo(chat2.hashCode());
@@ -39,10 +39,10 @@ class ChatTest {
     @Test
     void testEqualsAndHashCodeWithCollections() {
         // given
-        Chat chat1 = new Chat(1L, List.of(new Account()));
-        Chat chat2 = new Chat(1L, List.of(new Account()));
+        Chat chat1 = new Chat(1L, "adadadad", List.of(new Account()));
+        Chat chat2 = new Chat(1L, "adadadad", List.of(new Account()));
 
-        Chat chat3 = new Chat(2L, null);
+        Chat chat3 = new Chat(2L, "adadadad", null);
         // then
         assertThat(chat1).isEqualTo(chat2);
         assertThat(chat1.hashCode()).isEqualTo(chat2.hashCode());
@@ -52,7 +52,7 @@ class ChatTest {
     @Test
     void testToString() {
         // given
-        Chat chat = new Chat(1L, null);
+        Chat chat = new Chat(1L, "sadsadaf", null);
 
         // when
         String result = chat.toString();

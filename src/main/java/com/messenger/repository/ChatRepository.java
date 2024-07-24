@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ChatRepository extends JpaRepository<Chat, Long> {
     @Query("SELECT a FROM Chat a JOIN a.accounts acc WHERE acc.id =:id")
-    List<Chat> findAllByAccountId(Long id);
+    List<Chat> findAllByAccountId(@Param("id") Long id);
 
     @Query("SELECT c FROM Chat c WHERE SIZE(c.accounts) = :size " +
             "AND NOT EXISTS (SELECT a FROM c.accounts a WHERE a.id NOT IN :accountIds)")

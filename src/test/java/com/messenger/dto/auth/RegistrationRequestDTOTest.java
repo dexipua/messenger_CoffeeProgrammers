@@ -17,7 +17,7 @@ class RegistrationRequestDTOTest {
         registrationRequestDTO2.setDescription(registrationRequestDTO1.getDescription());
         registrationRequestDTO2.setFirstName(registrationRequestDTO1.getFirstName());
         registrationRequestDTO2.setLastName(registrationRequestDTO1.getLastName());
-        registrationRequestDTO2.setRole(registrationRequestDTO1.getRole());
+        registrationRequestDTO2.setCode(registrationRequestDTO1.getCode());
 
         assertEquals(registrationRequestDTO1, registrationRequestDTO2);
         assertEquals(registrationRequestDTO1.hashCode(), registrationRequestDTO2.hashCode());

@@ -100,7 +100,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     public Account addContact(long id, long contactId){
         Account account = findById(id);
 
-        account.getContacts().add(contactService.findByAccountId(contactId));
+        account.getContacts().add(contactService.findById(contactId));
 
         return accountRepository.save(account);
     }
@@ -109,7 +109,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     public Account removeContact(long id, long contactId){
         Account account = findById(id);
 
-        account.getContacts().remove(contactService.findByAccountId(contactId));
+        account.getContacts().remove(contactService.findById(contactId));
 
         return accountRepository.save(account);
     }

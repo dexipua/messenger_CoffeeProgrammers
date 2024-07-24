@@ -3,9 +3,12 @@ package com.messenger.services.impl;
 import com.messenger.mapper.ChatMapper;
 import com.messenger.models.Account;
 import com.messenger.models.Chat;
+import com.messenger.models.Message;
 import com.messenger.repository.ChatRepository;
 import com.messenger.services.interfaces.AccountService;
+import com.messenger.services.interfaces.MessageService;
 import jakarta.persistence.EntityNotFoundException;
+import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,11 +17,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -33,6 +37,9 @@ class ChatServiceImplTest {
 
     @Mock
     private AccountService accountService;
+
+    @Mock
+    private MessageService messageService;
 
     @InjectMocks
     private ChatServiceImpl chatService;
@@ -58,7 +65,7 @@ class ChatServiceImplTest {
         when(accountService.findById(2L)).thenReturn(account2);
         when(chatRepository.save(any(Chat.class))).thenReturn(chat);
 
-        Chat createdChat = chatService.create(1L, 2L);
+        Chat createdChat = chatService.create(1L, 2L, chat.getName());
 
         assertThat(createdChat.getAccounts()).containsExactlyInAnyOrder(account1, account2);
         verify(chatRepository, times(1)).save(any(Chat.class));
@@ -69,6 +76,7 @@ class ChatServiceImplTest {
     @Test
     void delete() {
         when(chatRepository.findById(1L)).thenReturn(Optional.of(chat));
+        when(messageService.getAllByChatId(chat.getId())).thenReturn(List.of(Instancio.create(Message.class)));
 
         chatService.delete(1L);
 
@@ -103,12 +111,25 @@ class ChatServiceImplTest {
     @Test
     void findByAccountId() {
         when(accountService.findById(1L)).thenReturn(account1);
-        when(chatRepository.findAllByAccountId(1L)).thenReturn(Arrays.asList(chat));
+        when(chatRepository.findAllByAccountId(1L)).thenReturn(Collections.singletonList(chat));
 
         List<Chat> chats = chatService.findByAccountId(1L);
 
         assertThat(chats).containsExactly(chat);
         verify(accountService, times(1)).findById(1L);
         verify(chatRepository, times(1)).findAllByAccountId(1L);
+    }
+
+    @Test
+    void findChatsByAccountId() {
+        when(chatRepository.findChatsByAccountIds(List.of(1L, 2L), 2)).thenReturn(List.of(chat));
+        assertEquals(chat.getId(), chatService.findChatsByAccountIds(List.of(1L, 2L)));
+        verify(chatRepository, times(1)).findChatsByAccountIds(List.of(1L, 2L), 2);
+    }
+    @Test
+    void notFindChatsByAccountId() {
+        when(chatRepository.findChatsByAccountIds(List.of(1L, 2L), 2)).thenReturn(List.of());
+        assertNull(chatService.findChatsByAccountIds(List.of(1L, 2L)));
+        verify(chatRepository, times(1)).findChatsByAccountIds(List.of(1L, 2L), 2);
     }
 }
