@@ -94,13 +94,6 @@ public class AccountController {
     public List<AccountResponseSimple> findAccountsNotInContactList(@PathVariable Long accountId,
                                                       @RequestParam int page,
                                                       @RequestParam int size) {
-//        PageRequest pageRequest = PageRequest.of(page, size);
-//        Page<Account> accountsPage = accountService.findAccountsNotInContactList(accountId, pageRequest);
-//        List<AccountResponseSimple> accountResponses = accountsPage.getContent().stream()
-//                .map(accountMapper::toResponseSimple)
-//                .collect(Collectors.toList());
-//        return new PageImpl<>(accountResponses, pageRequest, accountsPage.getTotalElements()).toList();
-
         return accountService.findAccountsNotInContactList(accountId, page, size).stream()
                 .map(accountMapper::toResponseSimple).toList();
     }
