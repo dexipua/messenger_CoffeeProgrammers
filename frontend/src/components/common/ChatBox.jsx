@@ -74,7 +74,7 @@ const ChatBox = ({chatId, selectedChatId, handleDelete}) => {
                 <ListItem key={account.id}>
                     <Box mb={-1} width="100%">
                         <TextField
-                            label={`Account #${index + 1}`}
+                            label={`Member #${index + 1}`}
                             value={account.firstName + " " + account.lastName}
                             variant="standard"
                             fullWidth

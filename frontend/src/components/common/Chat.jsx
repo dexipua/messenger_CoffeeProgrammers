@@ -106,14 +106,12 @@ const Chat = ({ selectedChatId }) => {
 
     return (
         <>
-            {messages.length > 0 ? (
+            {messages.length > 0 && (
                 messages.map((msg) => (
                     <div key={msg.id}>
                         <MessageBox message={msg} />
                     </div>
                 ))
-            ) : (
-                <div>No messages</div>
             )}
             <SendMessageBar
                 message={message}

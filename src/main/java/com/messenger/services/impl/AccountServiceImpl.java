@@ -34,9 +34,10 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
             throw new EntityExistsException("User with email " +
                     account.getEmail() + " already exists");
         }
-        contactService.create(new Contact(account.getId()));
         account.setPassword(passwordEncoder.encode(account.getPassword()));
-        return accountRepository.save(account);
+        Account created = accountRepository.save(account);
+        contactService.create(new Contact(created.getId()));
+        return created;
     }
 
     @Override
