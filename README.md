@@ -108,8 +108,8 @@ emails:
 - vb@gmail.com
 - vh@gmail.com
 
-password
-passWord1 - one for all
+password:
+"passWord1" - one for all
 
 code for verification is 12 for this accounts
 
