@@ -211,6 +211,9 @@
                 <configuration>
                     <source>22</source>
                     <target>22</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.mapstruct</groupId>
