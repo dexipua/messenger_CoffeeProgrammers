@@ -113,6 +113,8 @@ password:
 
 code for verification is 12 for this accounts
 
+youtube - https://youtu.be/Kank-xE7LG0
+
 ## P.S.
 
 If a javax.mail.AuthenticationFailedException happened,
