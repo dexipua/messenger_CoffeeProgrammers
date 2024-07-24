@@ -35,7 +35,7 @@ messages in already exists chats
 2. Navigate to the project directory:
 
    ```
-      cd Messenger_CoffeeProgramers
+      cd messenger_CoffeeProgrammers
    ```
 
 3. Build the project:
