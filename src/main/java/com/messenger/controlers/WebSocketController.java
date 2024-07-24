@@ -34,4 +34,9 @@ public class WebSocketController {
         System.out.println("MESSAGE " + messageMapper.toResponse(savedMessage));
         return messageMapper.toResponse(savedMessage);
     }
+
+    @MessageMapping("/ping")
+    public void ping() {
+        System.out.println("Ping received. Connection is active.");
+    }
 }

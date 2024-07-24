@@ -11,7 +11,7 @@ import Cookies from "js-cookie";
 import {Box} from "@mui/material";
 import AccountBox from "./AccountBox";
 
-const MyContacts = ({contacts, selectChatId, handleDelete}) => {
+const MyContacts = ({contacts, selectChatId, handleDelete, addChatToList}) => {
     const accountId = Cookies.get('id');
     const [selectedContactId, setSelectedContactId] = React.useState(null);
 
@@ -22,7 +22,8 @@ const MyContacts = ({contacts, selectChatId, handleDelete}) => {
     const getChat = async (contactId) => {
         const chatId = await ChatService.getByAccountIds(accountId, contactId);
         if (chatId === "") {
-            const response = await ChatService.create(accountId, contactId, "Chat Room");
+            const response = await ChatService.create(accountId, contactId, "PrivateChat");
+            addChatToList(response)
             selectChatId(response.id);
         } else {
             selectChatId(chatId);
@@ -36,6 +37,7 @@ const MyContacts = ({contacts, selectChatId, handleDelete}) => {
                     id={selectedContactId}
                     handleDelete={handleDelete}
                     selectContactId={setSelectedContactId}
+                    writeToContact={() => getChat(selectedContactId)}
                 />
             ) : (
                 <List>

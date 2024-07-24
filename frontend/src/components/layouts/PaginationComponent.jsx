@@ -5,10 +5,9 @@ const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
         <Pagination
             count={totalPages}
             page={currentPage}
+            siblingCount={0}
             onChange={onPageChange}
-            showFirstButton
-            showLastButton
-            size="large"
+            size="small"
             sx={{ margin: 2, justifyContent: 'center', display: 'flex' }}
         />
     );

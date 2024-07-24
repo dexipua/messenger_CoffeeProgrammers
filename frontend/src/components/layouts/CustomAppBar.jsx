@@ -13,7 +13,7 @@ const CustomAppBar = () => {
         >
             <Toolbar>
                 <Typography variant="h6" noWrap component="div">
-                    Todo
+                    Messenger
                 </Typography>
             </Toolbar>
         </AppBar>
