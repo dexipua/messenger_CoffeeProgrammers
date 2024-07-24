@@ -6,8 +6,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import MyAvatar from "../../layouts/MyAvatar";
 import DeleteButton from "../../layouts/delete/DeleteButton";
+import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 
-const AccountBox = ({id, handleDelete, selectContactId}) => {
+const AccountBox = ({id, handleDelete, selectContactId, writeToContact}) => {
     const myId = Cookies.get("id")
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -19,7 +20,7 @@ const AccountBox = ({id, handleDelete, selectContactId}) => {
     const [newDescription, setNewDescription] = useState("");
 
     const [isMyAccount, setIsMyAccount] = useState(false);
-    const [isEditing, setIsEditing] = useState(false); // Додано стан для режиму редагування
+    const [isEditing, setIsEditing] = useState(false);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -108,15 +109,16 @@ const AccountBox = ({id, handleDelete, selectContactId}) => {
                         </>
                     ) : (
                         <>
-                            <IconButton size="small">
+                            <IconButton onClick={writeToContact} edge="end">
+                                <EmailRoundedIcon/>
+                            </IconButton>
+                            <IconButton edge="end">
                                 <DeleteButton
                                     text={"Are you sure you want to delete this contact?"}
                                     deleteFunction={() => removeContact()}
                                 />
                             </IconButton>
-                            <IconButton size="small">
 
-                            </IconButton>
                         </>
                     )}
                 </Box>

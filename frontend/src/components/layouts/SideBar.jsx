@@ -61,19 +61,32 @@ export default function SideBar({selectChatId}) {
         setMyContacts(myContacts.filter(contact => contact.id !== contactId));
     }
 
+    const handleAddChatToList = (newChat) => {
+        setMyChats((prevChats) => [...prevChats, newChat]);
+    };
+
+    const handleDeleteChat = (chatId) => {
+        setMyChats(myChats.filter(chat => chat.id !== chatId));
+    }
     let tabContent;
     switch (tab) {
         case "MENU":
             tabContent = <TabsMenu selectTab={setTab}/>;
             break;
         case "CHATS":
-            tabContent = <MyChats chats={myChats} selectChatId={selectChatId} />;
+            tabContent =
+                <MyChats
+                    chats={myChats}
+                    selectChatId={selectChatId}
+                    handleDeleteChat={handleDeleteChat}
+                />;
             break;
         case "CONTACTS":
             tabContent = <MyContacts
                 contacts={myContacts}
                 selectChatId={selectChatId}
                 handleDelete={handleDeleteFromContact}
+                addChatToList={handleAddChatToList}
             />;
             break;
         case "MY_ACCOUNT":
@@ -102,7 +115,7 @@ export default function SideBar({selectChatId}) {
             <Drawer sx={drawerStyles} variant="permanent" anchor="left">
                 <Toolbar>
                     <IconButton edge="start"
-                        onClick={() => setTab("MENU")}
+                                onClick={() => setTab("MENU")}
                     >
                         <MenuRoundedIcon/>
                     </IconButton>
