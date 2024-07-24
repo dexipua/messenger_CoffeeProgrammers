@@ -10,14 +10,12 @@ import com.messenger.models.Account;
 import com.messenger.services.interfaces.AccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/accounts")
@@ -38,19 +36,21 @@ public class AccountController {
         return responseDTO;
     }
 
+    @PreAuthorize("@accountSecurity.checkAccount(#auth, #myId)")
     @GetMapping("/getAllContacts/{my_id}")
     @ResponseStatus(HttpStatus.OK)
     public List<AccountResponseSimple> getAllContacts(
-            @PathVariable("my_id") long myId) {
+            @PathVariable("my_id") long myId, Authentication auth) {
         return accountService.findAllContacts(myId).stream()
                 .map(accountMapper::toResponseSimple).toList();
     }
 
+    @PreAuthorize("@accountSecurity.checkAccount(#auth, #id)")
     @PostMapping("/update/{id}")
     @ResponseStatus(HttpStatus.OK)
     public AccountResponse update(
             @RequestBody @Valid AccountRequest accountRequest,
-            @PathVariable long id) {
+            @PathVariable long id, Authentication auth) {
         return accountMapper.toResponse(accountService.update(
                 accountMapper.toModel(accountRequest), id));
     }
@@ -70,15 +70,19 @@ public class AccountController {
         return responseDTO;
     }
 
+    @PreAuthorize("@accountSecurity.checkAccount(#auth, #id)")
     @PostMapping("/{id}/addContact/{contactId}")
     @ResponseStatus(HttpStatus.OK)
-    public AccountResponse addContact(@PathVariable long id, @PathVariable long contactId){
+    public AccountResponse addContact(@PathVariable long id, @PathVariable long contactId,
+                                      Authentication auth) {
         return accountMapper.toResponse(accountService.addContact(id, contactId));
     }
 
+    @PreAuthorize("@accountSecurity.checkAccount(#auth, #id)")
     @DeleteMapping("/{id}/removeContact/{contactId}")
     @ResponseStatus(HttpStatus.OK)
-    public AccountResponse removeContact(@PathVariable long id, @PathVariable long contactId){
+    public AccountResponse removeContact(@PathVariable long id, @PathVariable long contactId,
+                                         Authentication auth) {
         return accountMapper.toResponse(accountService.removeContact(id, contactId));
     }
 
@@ -89,11 +93,14 @@ public class AccountController {
         return accountMapper.toResponse(accountService.findById(id));
     }
 
+    @PreAuthorize("@accountSecurity.checkAccount(#auth, #id)")
     @GetMapping("/notInContactList/{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AccountResponseSimple> findAccountsNotInContactList(@PathVariable Long accountId,
-                                                      @RequestParam int page,
-                                                      @RequestParam int size) {
+    public List<AccountResponseSimple> findAccountsNotInContactList(
+            @PathVariable Long accountId,
+            @RequestParam int page,
+            @RequestParam int size,
+            Authentication auth) {
         return accountService.findAccountsNotInContactList(accountId, page, size).stream()
                 .map(accountMapper::toResponseSimple).toList();
     }
