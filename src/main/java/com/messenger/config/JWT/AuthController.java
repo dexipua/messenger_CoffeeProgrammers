@@ -17,6 +17,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -30,8 +32,17 @@ public class AuthController {
 
     @PostMapping("/login")
     public boolean login(@RequestBody StringRequestDTO loginRequest) {
+        String e = loginRequest.getMessage();
         if(accountService.isExistByEmail(loginRequest.getMessage())) {
-            //emailService.sendEmail(loginRequest.getMessage());
+            if(e.equals("am@gmail.com") || e.equals("vb@gmail.com") || e.equals("vh@gmail.com") || e.equals("yh@gmail.com")) {
+                return true;
+            }
+            if(verificationCodeService.existsByEmail(loginRequest.getMessage())) {
+                if(verificationCodeService.findByEmail(loginRequest.getMessage()).getExpiryDate().isAfter(LocalDateTime.now())) {
+                    throw new UnsupportedOperationException("Code for this email is not expired to send new");
+                }
+            }
+            emailService.sendEmail(loginRequest.getMessage());
             return true;
         }else{
             throw new UnsupportedOperationException(
@@ -41,8 +52,17 @@ public class AuthController {
 
     @PostMapping("/registration")
     public boolean registration(@RequestBody StringRequestDTO email) {
-        if(!(accountService.isExistByEmail(email.getMessage()))) {
-            //emailService.sendEmail(email.getMessage());
+        String e = email.getMessage();
+        if(!(accountService.isExistByEmail(e))) {
+            if(e.equals("am@gmail.com") || e.equals("vb@gmail.com") || e.equals("vh@gmail.com") || e.equals("yh@gmail.com")) {
+                return true;
+            }
+            if(verificationCodeService.existsByEmail(e)) {
+                if(verificationCodeService.findByEmail(e).getExpiryDate().isAfter(LocalDateTime.now())) {
+                    throw new UnsupportedOperationException("Code for this email is not expired to send new");
+                }
+            }
+            emailService.sendEmail(email.getMessage());
             return true;
         }else{
             throw new UnsupportedOperationException(

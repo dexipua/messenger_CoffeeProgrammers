@@ -3,6 +3,7 @@ package com.messenger.repository;
 import com.messenger.models.Account;
 import com.messenger.models.Chat;
 import com.messenger.models.Role;
+import com.messenger.models.Status;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ class ChatRepositoryTest {
         account.setFirstName("First");
         account.setLastName("Last");
         account.setRole(Role.USER);
+        account.setStatus(Status.ONLINE);
         accountRepository.save(account);
 
         Chat chat1 = new Chat();
@@ -45,9 +47,6 @@ class ChatRepositoryTest {
         chat2.getAccounts().add(account);
         chatRepository.save(chat1);
         chatRepository.save(chat2);
-
-        account.getChats().add(chat1);
-        account.getChats().add(chat2);
         accountRepository.save(account);
 
         // when

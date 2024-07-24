@@ -17,10 +17,9 @@ class AccountTest {
         account2.setFirstName(account1.getFirstName());
         account2.setLastName(account1.getLastName());
         account2.setPassword(account1.getPassword());
-        account2.setChats(account1.getChats());
         account2.setStatus(account1.getStatus());
-        account2.setAccounts(account1.getAccounts());
         account2.setDescription(account1.getDescription());
+        account2.setContacts(account1.getContacts());
 
         assertEquals(account1, account2);
         assertEquals(account1.hashCode(), account2.hashCode());

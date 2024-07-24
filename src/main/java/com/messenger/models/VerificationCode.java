@@ -2,7 +2,10 @@ package com.messenger.models;
 
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,7 +15,6 @@ import java.util.UUID;
 @Setter
 @Table(name = "codes")
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode
 public class VerificationCode {
 
@@ -32,6 +34,6 @@ public class VerificationCode {
     public VerificationCode(String email) {
         this.email = email;
         this.code = UUID.randomUUID().toString().replace("-", "0").substring(0, 7);
-        this.expiryDate = LocalDateTime.now().plusMinutes(10);
+        this.expiryDate = LocalDateTime.now().plusMinutes(3);
     }
 }

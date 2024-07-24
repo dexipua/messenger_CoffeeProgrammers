@@ -9,12 +9,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.instancio.Select.field;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
@@ -44,13 +44,11 @@ class MessageRepositoryTest {
     @BeforeEach
     void setUp() {
         account1 = Instancio.of(Account.class)
-                .ignore(field(Account.class, "chats"))
-                .ignore(field(Account.class, "accounts"))
                 .create();
         account2 = Instancio.of(Account.class)
-                .ignore(field(Account.class, "chats"))
-                .ignore(field(Account.class, "accounts"))
                 .create();
+        account1.setContacts(new ArrayList<>());
+        account2.setContacts(new ArrayList<>());
         account1 = accountRepository.save(account1);
         account2 = accountRepository.save(account2);
 
@@ -68,7 +66,7 @@ class MessageRepositoryTest {
         message = new Message();
         message.setDate(LocalDateTime.now());
         message.setText("Sdsd123sdsds");
-        message.setAccount(account1);
+        message.setSender(account1);
 
         message.setChat(chat);
 
@@ -78,7 +76,7 @@ class MessageRepositoryTest {
     @Test
     void findByChatId() {
         //when
-        List<Message> res = messageRepository.findByChatId(chat.getId());
+        List<Message> res = messageRepository.findByChatId(chat.getId(), Sort.by(Sort.Direction.ASC, "date"));
 
         //then
         assertEquals(List.of(message), res);
@@ -87,25 +85,7 @@ class MessageRepositoryTest {
     @Test
     void notFindByChatId() {
         //when
-        List<Message> res = messageRepository.findByChatId(chat2.getId());
-
-        //then
-        assertEquals(List.of(), res);
-    }
-
-    @Test
-    void findByChatIdAndText() {
-        //when
-        List<Message> res = messageRepository.findByChatIdAndTextContaining(chat.getId(), "123");
-
-        //then
-        assertEquals(List.of(message), res);
-    }
-
-    @Test
-    void notFindByChatIdAndText() {
-        //when
-        List<Message> res = messageRepository.findByChatIdAndTextContaining(chat.getId(), "da");
+        List<Message> res = messageRepository.findByChatId(chat2.getId(), Sort.by(Sort.Direction.ASC, "date"));
 
         //then
         assertEquals(List.of(), res);

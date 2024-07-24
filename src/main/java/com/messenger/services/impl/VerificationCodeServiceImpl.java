@@ -17,13 +17,6 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
 
     @Transactional
     public VerificationCode generateNewVerificationCode(String email) {
-        if(
-                email.equals("am@gmail.com")
-             || email.equals("vb@gmail.com")
-             || email.equals("yh@gmail.com")
-             || email.equals("vh@gmail.com")) {
-            return findByEmail(email);
-        }
         VerificationCode verificationCode = new VerificationCode(email);
         if(verificationCodeRepository.existsByEmail(email)) {
             verificationCode.setId(findByEmail(email).getId());
@@ -49,5 +42,10 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         } else {
             throw new UnsupportedOperationException("Verification code for this email is already expired");
         }
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return verificationCodeRepository.existsByEmail(email);
     }
 }

@@ -15,35 +15,26 @@ class ChatResponseTest {
 
     @Test
     void testGettersAndSetters() {
-        // given
-        Long id = 1L;
-        List<Message> messages = new ArrayList<>();
-        List<Account> accounts = new ArrayList<>();
-
         // when
-        ChatResponse chatResponse = new ChatResponse(id, messages, accounts);
+        ChatResponse chatResponse = new ChatResponse(0L, new ArrayList<>());
         chatResponse.setId(2L);
-        chatResponse.setMessages(Arrays.asList(new Message()));
-        chatResponse.setAccounts(Arrays.asList(new Account()));
+        chatResponse.setAccounts(List.of(new AccountResponseSimple()));
 
         // then
         assertThat(chatResponse.getId()).isEqualTo(2L);
-        assertThat(chatResponse.getMessages()).hasSize(1);
         assertThat(chatResponse.getAccounts()).hasSize(1);
     }
 
     @Test
     void testEquals() {
         // given
-        List<Message> messages1 = Arrays.asList(new Message());
-        List<Account> accounts1 = Arrays.asList(new Account());
+        List<AccountResponseSimple> accounts1 = List.of(new AccountResponseSimple());
 
-        List<Message> messages2 = Arrays.asList(new Message());
-        List<Account> accounts2 = Arrays.asList(new Account());
+        List<AccountResponseSimple> accounts2 = List.of(new AccountResponseSimple());
 
-        ChatResponse chatResponse1 = new ChatResponse(1L, messages1, accounts1);
-        ChatResponse chatResponse2 = new ChatResponse(1L, messages1, accounts1);
-        ChatResponse chatResponse3 = new ChatResponse(2L, messages2, accounts2);
+        ChatResponse chatResponse1 = new ChatResponse(1L, accounts1);
+        ChatResponse chatResponse2 = new ChatResponse(1L, accounts1);
+        ChatResponse chatResponse3 = new ChatResponse(2L, accounts2);
 
         // then
         assertThat(chatResponse1).isEqualTo(chatResponse2);
@@ -55,10 +46,10 @@ class ChatResponseTest {
     @Test
     void testHashCode() {
         // given
-        ChatResponse chatResponse1 = new ChatResponse(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));
-        ChatResponse chatResponse2 = new ChatResponse(1L, Arrays.asList(new Message()), Arrays.asList(new Account()));
+        ChatResponse chatResponse1 = new ChatResponse(1L, List.of(new AccountResponseSimple()));
+        ChatResponse chatResponse2 = new ChatResponse(1L, List.of(new AccountResponseSimple()));
 
-        ChatResponse chatResponse3 = new ChatResponse(2L, null, null);
+        ChatResponse chatResponse3 = new ChatResponse(2L, null);
 
         // then
         assertThat(chatResponse1.hashCode()).isEqualTo(chatResponse2.hashCode());
@@ -69,7 +60,7 @@ class ChatResponseTest {
     @Test
     void testToString() {
         // given
-        ChatResponse chatResponse = new ChatResponse(1L, new ArrayList<>(), new ArrayList<>());
+        ChatResponse chatResponse = new ChatResponse(1L, new ArrayList<>());
 
         // when
         String result = chatResponse.toString();

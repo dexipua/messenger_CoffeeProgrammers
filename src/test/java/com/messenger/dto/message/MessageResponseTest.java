@@ -11,7 +11,7 @@ class MessageResponseTest {
         MessageResponse messageResponse1 = Instancio.create(MessageResponse.class);
 
         MessageResponse messageResponse2 = new MessageResponse();
-        messageResponse2.setAccountResponse(messageResponse1.getAccountResponse());
+        messageResponse2.setSender(messageResponse1.getSender());
         messageResponse2.setId(messageResponse1.getId());
         messageResponse2.setDate(messageResponse1.getDate());
         messageResponse2.setText(messageResponse1.getText());

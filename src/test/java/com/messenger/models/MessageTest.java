@@ -16,7 +16,7 @@ public class MessageTest {
         message2.setId(message1.getId());
         message2.setChat(message1.getChat());
         message2.setDate(message1.getDate());
-        message2.setAccount(message1.getAccount());
+        message2.setSender(message1.getSender());
 
         assertEquals(message1, message2);
         assertEquals(message1.hashCode(), message2.hashCode());
