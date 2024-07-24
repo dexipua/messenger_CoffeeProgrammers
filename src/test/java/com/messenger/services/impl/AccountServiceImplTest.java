@@ -51,6 +51,7 @@ class AccountServiceImplTest {
         // when
         when(accountRepository.findByEmail(account.getEmail())).thenReturn(Optional.empty());
         when(contactService.create(any(Contact.class))).thenReturn(Instancio.create(Contact.class));
+        when(accountRepository.save(any(Account.class))).thenReturn(account);
         // then
         accountService.create(account);
         ArgumentCaptor<Account> argumentCaptor = ArgumentCaptor.forClass(Account.class);
@@ -86,11 +87,10 @@ class AccountServiceImplTest {
 
     @Test
     void getAll() {
-        when(accountRepository.findAll(PageRequest.of(0, 10,
+        when(accountRepository.findAccountsNotInContactList(account.getId(), PageRequest.of(0, 10,
                 Sort.by(Sort.Direction.ASC, "lastName", "firstName")))).thenReturn(new PageImpl<>(List.of(account)));
-        assertEquals(new PageImpl<>(List.of(account)).toList(), accountService.findAll(0, 10)[0]);
-        assertEquals(new PageImpl<>(List.of(account)).getTotalPages(), accountService.findAll(0, 10)[1]);
-        verify(accountRepository, times(2)).findAll(PageRequest.of(0, 10,
+        assertEquals(List.of(account), accountService.findAccountsNotInContactList(account.getId(), 0, 10).toList());
+        verify(accountRepository, times(1)).findAccountsNotInContactList(account.getId(), PageRequest.of(0, 10,
                 Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
     }
 
@@ -132,10 +132,9 @@ class AccountServiceImplTest {
 
     @Test
     void findAllByNames() {
-        when(accountRepository.findAllByLastNameContainsAndFirstNameContains(account.getLastName(), account.getFirstName(), PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "lastName", "firstName")))).thenReturn(new PageImpl<>(List.of(account)));
-        assertEquals(new PageImpl<>(List.of(account)).toList(), accountService.findByNames(account.getLastName(), account.getFirstName(), 0, 10)[0]);
-        assertEquals(new PageImpl<>(List.of(account)).getTotalPages(), accountService.findByNames(account.getLastName(), account.getFirstName(), 0, 10)[1]);
-        verify(accountRepository, times(2)).findAllByLastNameContainsAndFirstNameContains(account.getLastName(), account.getFirstName(), PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
+        when(accountRepository.findByFirstNameAndLastNameExcludingId(account.getFirstName(), account.getLastName(), account.getId(), PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "lastName", "firstName")))).thenReturn(new PageImpl<>(List.of(account)));
+        assertEquals(new PageImpl<>(List.of(account)), accountService.findAccountsNotInContactListAndSearchByNamesIgnoreCase(account.getId(), 0, 10, account.getFirstName(), account.getLastName()));
+        verify(accountRepository, times(1)).findByFirstNameAndLastNameExcludingId(account.getFirstName(), account.getLastName(), account.getId(), PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "lastName", "firstName")));
     }
 
     @Test
@@ -152,10 +151,11 @@ class AccountServiceImplTest {
         account1.setContacts(List.of(Instancio.create(Contact.class)));
         when(accountRepository.findById(account.getId())).thenReturn(Optional.of(account));
         when(contactService.findById(2L)).thenReturn(account1.getContacts().get(0));
+        when(accountRepository.findById(account1.getContacts().get(0).getAccountId())).thenReturn(Optional.of(account1));
         when(accountRepository.save(any(Account.class))).thenReturn(account1);
         assertEquals(account1.getContacts().size(), accountService.addContact(account.getId(), 2L).getContacts().size());
         verify(accountRepository, times(1)).findById(account.getId());
-        verify(contactService, times(1)).findById(2L);
+        verify(contactService, times(2)).findById(2L);
     }
 
     @Test
@@ -173,8 +173,8 @@ class AccountServiceImplTest {
     @Test
     void findAccountsNotInContactList() {
         List<Account> expected = Instancio.createList(Account.class);
-        when(accountRepository.findAccountsNotInContactList(account.getId(), PageRequest.of(0, 10))).thenReturn(new PageImpl<>(expected));
-        assertEquals(expected, accountService.findAccountsNotInContactList(account.getId(), 0, 10));
-        verify(accountRepository, times(1)).findAccountsNotInContactList(account.getId(), PageRequest.of(0, 10));
+        when(accountRepository.findAccountsNotInContactList(account.getId(), PageRequest.of(0, 10, Sort.Direction.ASC, "lastName", "firstName"))).thenReturn(new PageImpl<>(expected));
+        assertEquals(new PageImpl<>(expected), accountService.findAccountsNotInContactList(account.getId(), 0, 10));
+        verify(accountRepository, times(1)).findAccountsNotInContactList(account.getId(), PageRequest.of(0, 10, Sort.Direction.ASC, "lastName", "firstName"));
     }
 }

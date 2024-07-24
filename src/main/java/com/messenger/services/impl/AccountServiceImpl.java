@@ -77,8 +77,8 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     public Account addContact(long id, long contactId){
         Account account = findById(id);
 
-        account.getContacts().add(contactService.findByAccountId(contactId));
-        Account toAdd = findById(contactService.findByAccountId(contactId).getAccountId());
+        account.getContacts().add(contactService.findById(contactId));
+        Account toAdd = findById(contactService.findById(contactId).getAccountId());
         return accountRepository.save(toAdd);}
 
     @Override
