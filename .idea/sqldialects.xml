@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/com/messenger/repository/ChatRepository.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0001__base_init.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0002__create_table_accounts.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0003__insert_account.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0004__create_table_chats.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0005__insert_chats.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0006__create_table_account_chat.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0007__insert_account_chat.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0008__create_table_account_contact.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0009__insert_account_contact.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0010__create_table_messages.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0012__create_table_codes.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0013__insert_codes.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migrations/V0014__insert_contacts.sql" dialect="GenericSQL" />
+  </component>
+</project>

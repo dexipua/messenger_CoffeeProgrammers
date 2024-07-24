@@ -1,2 +1,6 @@
-insert into chats default values ;
-insert into chats default values ;
+insert into chats(name) values('PrivateChat');
+insert into chats(name) values('PrivateChat');
+insert into chats(name) values('PrivateChat');
+insert into chats(name) values('PrivateChat');
+insert into chats(name) values('PrivateChat');
+insert into chats(name) values('PrivateChat');
