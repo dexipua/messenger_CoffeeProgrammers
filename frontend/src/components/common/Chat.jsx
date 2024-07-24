@@ -8,7 +8,7 @@ import MessageBox from './message/MessageBox';
 
 let stompClient = null;
 
-const Chat = ({ selectedChatId }) => {
+const Chat = ({selectedChatId}) => {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(true);
@@ -24,11 +24,15 @@ const Chat = ({ selectedChatId }) => {
                     onConnect: () => {
                         stompClient.subscribe(`/user/${Cookies.get('id')}/queue/messages`, onMessageReceived);
                         const pingInterval = setInterval(() => {
-                            stompClient.publish({
-                                destination: '/app/ping',
-                                body: JSON.stringify({}),
-                                headers: { 'content-type': 'application/json' }
-                            });
+                            if (stompClient && stompClient.connected) {
+                                stompClient.publish({
+                                    destination: '/app/ping',
+                                    body: JSON.stringify({}),
+                                    headers: {'content-type': 'application/json'}
+                                });
+                            } else {
+                                console.error('There is no underlying STOMP connection');
+                            }
                         }, 30000);
 
                         return () => clearInterval(pingInterval);
@@ -109,7 +113,7 @@ const Chat = ({ selectedChatId }) => {
             {messages.length > 0 && (
                 messages.map((msg) => (
                     <div key={msg.id}>
-                        <MessageBox message={msg} />
+                        <MessageBox message={msg}/>
                     </div>
                 ))
             )}
