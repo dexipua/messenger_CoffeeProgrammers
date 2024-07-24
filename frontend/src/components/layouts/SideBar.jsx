@@ -15,6 +15,8 @@ import IconButton from "@mui/material/IconButton";
 import TabsMenu from "../common/TabsMenu";
 import AccountBox from "../common/account/AccountBox";
 import Cookies from "js-cookie";
+import AllAccounts from "../common/AllAccounts";
+import LogoutButton from "./LogoutButton";
 
 const drawerWidth = 260;
 
@@ -61,26 +63,53 @@ export default function SideBar({selectChatId}) {
         setMyContacts(myContacts.filter(contact => contact.id !== contactId));
     }
 
+    const handleAddContact = (contact) => {
+        setMyContacts((prev) => [...prev, contact]);
+    };
+
+    const handleAddChatToList = (newChat) => {
+        setMyChats((prevChats) => [...prevChats, newChat]);
+    };
+
+    const handleDeleteChat = (chatId) => {
+        setMyChats(myChats.filter(chat => chat.id !== chatId));
+    }
+
+
     let tabContent;
     switch (tab) {
         case "MENU":
-            tabContent = <TabsMenu selectTab={setTab}/>;
+            tabContent =
+                <>
+                    <TabsMenu selectTab={setTab}/>
+                    <Divider/>
+                    <LogoutButton/>
+                </>
             break;
         case "CHATS":
-            tabContent = <MyChats chats={myChats} selectChatId={selectChatId} />;
+            tabContent =
+                <MyChats
+                    chats={myChats}
+                    selectChatId={selectChatId}
+                    handleDeleteChat={handleDeleteChat}
+                />;
             break;
         case "CONTACTS":
             tabContent = <MyContacts
                 contacts={myContacts}
                 selectChatId={selectChatId}
                 handleDelete={handleDeleteFromContact}
+                addChatToList={handleAddChatToList}
             />;
             break;
         case "MY_ACCOUNT":
             tabContent = <AccountBox id={accountId}/>;
             break;
-        case "ACCOUNT":
-            tabContent = <AccountBox id={accountId}/>;
+        case "ALL_USERS":
+            tabContent = <AllAccounts handleAddContact={handleAddContact}/>;
+            break;
+        case "LOG":
+            tabContent = <AllAccounts/>;
             break;
         default:
             tabContent = <div>Something went wrong</div>
@@ -101,7 +130,8 @@ export default function SideBar({selectChatId}) {
             <CustomAppBar/>
             <Drawer sx={drawerStyles} variant="permanent" anchor="left">
                 <Toolbar>
-                    <IconButton edge="start"
+                    <IconButton
+                        edge="start"
                         onClick={() => setTab("MENU")}
                     >
                         <MenuRoundedIcon/>

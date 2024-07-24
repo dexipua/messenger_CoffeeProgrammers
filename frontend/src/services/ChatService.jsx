@@ -38,7 +38,7 @@ class ChatService {
 
     async delete(id) {
         return await this.handleRequest(
-            () => apiClient.delete(`/findByAccountId/${id}`));
+            () => apiClient.delete(`/delete/${id}`));
     }
 
     async create(firstAccountId, secondAccountId, name) {

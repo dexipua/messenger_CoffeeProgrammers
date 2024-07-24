@@ -6,8 +6,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import MyAvatar from "../../layouts/MyAvatar";
 import DeleteButton from "../../layouts/delete/DeleteButton";
+import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+import Typography from "@mui/material/Typography";
 
-const AccountBox = ({id, handleDelete, selectContactId}) => {
+const AccountBox = ({id, handleDelete, selectContactId, writeToContact}) => {
     const myId = Cookies.get("id")
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -19,7 +21,7 @@ const AccountBox = ({id, handleDelete, selectContactId}) => {
     const [newDescription, setNewDescription] = useState("");
 
     const [isMyAccount, setIsMyAccount] = useState(false);
-    const [isEditing, setIsEditing] = useState(false); // Додано стан для режиму редагування
+    const [isEditing, setIsEditing] = useState(false);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -69,7 +71,7 @@ const AccountBox = ({id, handleDelete, selectContactId}) => {
             setDescription(response.description);
             setIsEditing(false);
         } catch (error) {
-            setError(error.message);
+            setError(error.response.data.messages);
         }
     };
 
@@ -91,32 +93,28 @@ const AccountBox = ({id, handleDelete, selectContactId}) => {
         return <p>Loading...</p>;
     }
 
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
-
     return (
         <List>
             <ListItem>
                 <Box display="flex" alignItems="center" gap={1} mb={-1}>
                     <MyAvatar name={firstName + " " + lastName}/>
                     {isMyAccount ? (
-                        <>
-                            <IconButton onClick={toggleEditMode} size="small">
-                                {isEditing ? <CancelIcon/> : <EditIcon/>}
-                            </IconButton>
-                        </>
+                        <IconButton onClick={toggleEditMode} size="small">
+                            {isEditing ? <CancelIcon/> : <EditIcon/>}
+                        </IconButton>
+
                     ) : (
                         <>
-                            <IconButton size="small">
+                            <IconButton onClick={writeToContact} edge="end">
+                                <EmailRoundedIcon/>
+                            </IconButton>
+                            <IconButton edge="end">
                                 <DeleteButton
                                     text={"Are you sure you want to delete this contact?"}
                                     deleteFunction={() => removeContact()}
                                 />
                             </IconButton>
-                            <IconButton size="small">
 
-                            </IconButton>
                         </>
                     )}
                 </Box>
@@ -170,6 +168,11 @@ const AccountBox = ({id, handleDelete, selectContactId}) => {
                     />
                 </Box>
             </ListItem>
+            {!error ? "" : error.map(er =>
+                <Typography variant="body2" color="textSecondary" align="center">
+                    {er}
+                </Typography>
+            )}
             {
                 isEditing &&
                 <ListItem>

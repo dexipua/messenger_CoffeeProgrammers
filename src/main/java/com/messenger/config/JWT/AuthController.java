@@ -30,6 +30,18 @@ public class AuthController {
     private final EmailService emailService;
     private final VerificationCodeService verificationCodeService;
 
+    @PostMapping("/check/reg")
+    public void checkRegistration(@RequestBody
+                                      @Valid RegistrationRequestDTO registrationRequestDTO) {}
+
+    @PostMapping("/check/login")public void checkLogin(
+            @RequestBody @Valid LoginRequestDTO loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()));
+    }
+
     @PostMapping("/login")
     public boolean login(@RequestBody StringRequestDTO loginRequest) {
         String e = loginRequest.getMessage();
