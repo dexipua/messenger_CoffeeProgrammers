@@ -24,4 +24,8 @@ public class MessageServiceImpl implements MessageService {
     public Message create(Message message) {
         return messageRepository.save(message);
     }
+
+    public void delete(long id) {
+        messageRepository.deleteById(id);
+    }
 }

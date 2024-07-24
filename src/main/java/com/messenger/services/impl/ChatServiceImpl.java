@@ -5,6 +5,7 @@ import com.messenger.models.Chat;
 import com.messenger.repository.ChatRepository;
 import com.messenger.services.interfaces.AccountService;
 import com.messenger.services.interfaces.ChatService;
+import com.messenger.services.interfaces.MessageService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class ChatServiceImpl implements ChatService {
     public final ChatRepository chatRepository;
     public final ChatMapper chatMapper;
     public final AccountService accountService;
-
+    public final MessageService messageService;
 
     @Override
     public Chat create(Long firstId, Long secondId, String name) {
@@ -31,6 +32,8 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void delete(Long chatId) {
         findById(chatId);
+        messageService.getAllByChatId(chatId).stream()
+                .forEach(a -> messageService.delete(a.getId()));
         chatRepository.deleteById(chatId);
     }
 
