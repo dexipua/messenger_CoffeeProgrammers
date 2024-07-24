@@ -1,20 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
-import Cookies from "js-cookie";
-import SendMessageBar from "./message/SendMessageBar";
+import Cookies from 'js-cookie';
+import SendMessageBar from './message/SendMessageBar';
 import axios from 'axios';
-import MessageBox from "./message/MessageBox";
+import MessageBox from './message/MessageBox';
 
 let stompClient = null;
 
-const Chat = ({selectedChatId}) => {
+const Chat = ({ selectedChatId }) => {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        console.log("USEEFFECT")
         const setupWebSocket = async () => {
             try {
                 const socket = new SockJS('http://localhost:8080/ws');
@@ -23,6 +23,15 @@ const Chat = ({selectedChatId}) => {
                     debug: (str) => console.log(str),
                     onConnect: () => {
                         stompClient.subscribe(`/user/${Cookies.get('id')}/queue/messages`, onMessageReceived);
+                        const pingInterval = setInterval(() => {
+                            stompClient.publish({
+                                destination: '/app/ping',
+                                body: JSON.stringify({}),
+                                headers: { 'content-type': 'application/json' }
+                            });
+                        }, 30000);
+
+                        return () => clearInterval(pingInterval);
                     },
                     onStompError: (frame) => {
                         console.error('Broker reported error: ' + frame.headers['message']);
@@ -41,16 +50,15 @@ const Chat = ({selectedChatId}) => {
                             }
                         }
                     );
-
                     setMessages(response.data);
-
                 }
 
                 stompClient.activate();
             } catch (error) {
                 console.error('WebSocket connection or data fetch error:', error);
+                setError('Error setting up WebSocket or fetching messages');
             } finally {
-                setLoading(false); // Завершити завантаження
+                setLoading(false);
             }
         };
 
@@ -89,26 +97,29 @@ const Chat = ({selectedChatId}) => {
     };
 
     if (loading) {
-        <div>Loading...</div>
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
     }
 
     return (
         <>
-            {messages && messages.map((message) => (
-                <div key={message.id}>
-                    <MessageBox
-                        message={message}
-                    />
-                </div>
-
-            ))}
+            {messages.length > 0 ? (
+                messages.map((msg) => (
+                    <div key={msg.id}>
+                        <MessageBox message={msg} />
+                    </div>
+                ))
+            ) : (
+                <div>No messages</div>
+            )}
             <SendMessageBar
                 message={message}
                 changeMessage={setMessage}
                 sendMessage={sendMessage}
             />
-
-
         </>
     );
 };
