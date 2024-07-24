@@ -8,7 +8,6 @@ import MyAvatar from "../../layouts/MyAvatar";
 import DeleteButton from "../../layouts/delete/DeleteButton";
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import Typography from "@mui/material/Typography";
-import LogoutButton from "../../layouts/LogoutButton";
 
 const AccountBox = ({id, handleDelete, selectContactId, writeToContact}) => {
     const myId = Cookies.get("id")
@@ -100,12 +99,10 @@ const AccountBox = ({id, handleDelete, selectContactId, writeToContact}) => {
                 <Box display="flex" alignItems="center" gap={1} mb={-1}>
                     <MyAvatar name={firstName + " " + lastName}/>
                     {isMyAccount ? (
-                        <>
-                            <IconButton onClick={toggleEditMode} size="small">
-                                {isEditing ? <CancelIcon/> : <EditIcon/>}
-                            </IconButton>
-                            <LogoutButton />
-                        </>
+                        <IconButton onClick={toggleEditMode} size="small">
+                            {isEditing ? <CancelIcon/> : <EditIcon/>}
+                        </IconButton>
+
                     ) : (
                         <>
                             <IconButton onClick={writeToContact} edge="end">

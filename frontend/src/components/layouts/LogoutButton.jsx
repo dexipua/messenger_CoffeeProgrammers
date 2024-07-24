@@ -1,7 +1,9 @@
 import React from "react";
 import Cookies from "js-cookie";
-import {Box, Button} from "@mui/material";
+import {Box} from "@mui/material";
 import {useNavigate} from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const LogoutButton = () => {
     const navigate = useNavigate();
@@ -17,10 +19,10 @@ const LogoutButton = () => {
     };
 
     return (
-        <Box m={1}>
-            <Button variant="text" size='medium' onClick={handleLogout}>
-                Logout
-            </Button>
+        <Box m={1} sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <IconButton size="small" onClick={handleLogout}>
+                <LogoutIcon />
+            </IconButton>
         </Box>
     );
 };
