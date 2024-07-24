@@ -10,10 +10,14 @@ import com.messenger.models.Account;
 import com.messenger.services.interfaces.AccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/accounts")
@@ -83,5 +87,21 @@ public class AccountController {
     public AccountResponse findById(@PathVariable long id) {
         System.out.println(id);
         return accountMapper.toResponse(accountService.findById(id));
+    }
+
+    @GetMapping("/notInContactList/{accountId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AccountResponseSimple> findAccountsNotInContactList(@PathVariable Long accountId,
+                                                      @RequestParam int page,
+                                                      @RequestParam int size) {
+//        PageRequest pageRequest = PageRequest.of(page, size);
+//        Page<Account> accountsPage = accountService.findAccountsNotInContactList(accountId, pageRequest);
+//        List<AccountResponseSimple> accountResponses = accountsPage.getContent().stream()
+//                .map(accountMapper::toResponseSimple)
+//                .collect(Collectors.toList());
+//        return new PageImpl<>(accountResponses, pageRequest, accountsPage.getTotalElements()).toList();
+
+        return accountService.findAccountsNotInContactList(accountId, page, size).stream()
+                .map(accountMapper::toResponseSimple).toList();
     }
 }

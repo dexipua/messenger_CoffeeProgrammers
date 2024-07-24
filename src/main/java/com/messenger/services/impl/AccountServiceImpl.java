@@ -113,4 +113,10 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
         return accountRepository.save(account);
     }
+
+    @Override
+    public List<Account> findAccountsNotInContactList(Long accountId, int page, int size) {
+        return accountRepository.findAccountsNotInContactList(accountId, PageRequest.of(page, size)).toList();
+    }
+
 }
