@@ -45,9 +45,9 @@ class AuthService {
         return data;
     }
 
-    async reg(username, password) {
+    async reg(username) {
         return await this.handleRequest(
-            () => apiClient.post(`/login`, {
+            () => apiClient.post(`/registration`, {
                 params: {
                     username: username,
                 }
@@ -91,6 +91,27 @@ class AuthService {
                 message: token
             }));
         Cookies.set('token', data.token)
+    }
+
+    async regValid(username, password, code, description, firstName, lastName,) {
+        const data = await this.handleRequest(
+            () => apiClient.post(`/check/reg`, {
+                description: description,
+                firstName: firstName,
+                lastName: lastName,
+                username: username,
+                password: password,
+                code: code
+            }));
+    }
+
+    async logValid(username, password, code) {
+        const data = await this.handleRequest(
+            () => apiClient.post(`/check/login`, {
+                username: username,
+                password: password,
+                code: code
+            }));
     }
 }
 

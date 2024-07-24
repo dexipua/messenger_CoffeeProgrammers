@@ -7,6 +7,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import MyAvatar from "../../layouts/MyAvatar";
 import DeleteButton from "../../layouts/delete/DeleteButton";
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+import Typography from "@mui/material/Typography";
 
 const AccountBox = ({id, handleDelete, selectContactId, writeToContact}) => {
     const myId = Cookies.get("id")
@@ -70,7 +71,7 @@ const AccountBox = ({id, handleDelete, selectContactId, writeToContact}) => {
             setDescription(response.description);
             setIsEditing(false);
         } catch (error) {
-            setError(error.message);
+            setError(error.response.data.messages);
         }
     };
 
@@ -90,10 +91,6 @@ const AccountBox = ({id, handleDelete, selectContactId, writeToContact}) => {
 
     if (loading) {
         return <p>Loading...</p>;
-    }
-
-    if (error) {
-        return <p>Error: {error}</p>;
     }
 
     return (
@@ -172,6 +169,11 @@ const AccountBox = ({id, handleDelete, selectContactId, writeToContact}) => {
                     />
                 </Box>
             </ListItem>
+            {!error ? "" : error.map(er =>
+                <Typography variant="body2" color="textSecondary" align="center">
+                    {er}
+                </Typography>
+            )}
             {
                 isEditing &&
                 <ListItem>

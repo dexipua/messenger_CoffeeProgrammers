@@ -31,21 +31,20 @@ const Login = () => {
     const [isLogin, setIsLogin] = useState(false)
 
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(false)
+    const [error, setError] = useState(null)
 
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
         setLoading(true);
-
         try {
-            const response = await AuthService.login(email)
+            let response = await AuthService.logValid(email, password, 0)
+            response = await AuthService.login(email)
             setIsLogin(true)
             console.log('Login successful:', response);
         } catch (error) {
-            setError(error.message);
+            setError(error.response.data.messages);
         } finally {
             setLoading(false);
         }
@@ -61,7 +60,7 @@ const Login = () => {
             navigate('/')
             console.log('LoginVerification successful:', response);
         } catch (error) {
-            setError(error.message);
+            setError(error.response.data.messages);
         } finally {
             setLoading(false);
         }
@@ -69,10 +68,6 @@ const Login = () => {
 
     if (loading) {
         <p>Loading...</p>
-    }
-
-    if (error) {
-        <p>Error</p>
     }
 
     return (
@@ -103,6 +98,11 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             fullWidth
                         />
+                        {!error ? "" : error.map(er =>
+                            <Typography variant="body2" color="textSecondary" align="center">
+                                {er}
+                            </Typography>
+                        )}
                         <Button
                             type="submit"
                             variant="contained"
@@ -129,7 +129,6 @@ const Login = () => {
                         <Typography variant="body2" color="textSecondary" align="center">
                             You will receive a verification code to your email. Please Check your inbox (and spam folder) for the code.
                         </Typography>
-
                         <TextField
                             label="Code"
                             type="text"
@@ -138,6 +137,11 @@ const Login = () => {
                             onChange={(e) => setCode(e.target.value)}
                             fullWidth
                         />
+                        {!error ? "" : error.map(er =>
+                            <Typography variant="body2" color="textSecondary" align="center">
+                                {er}
+                            </Typography>
+                        )}
                         <Button
                             type="submit"
                             variant="contained"
