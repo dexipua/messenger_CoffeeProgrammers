@@ -69,7 +69,7 @@ class AccountService {
     async update(firstName, lastName, description) {
         const userId = Cookies.get('id');
         return await this.handleRequest(
-            () => apiClient.post(`${API_URL}/update/${userId}`,
+            () => apiClient.post(`/update/${userId}`,
                 {
                     firstName: firstName,
                     lastName: lastName,

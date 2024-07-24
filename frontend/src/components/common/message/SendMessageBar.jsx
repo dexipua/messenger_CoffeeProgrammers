@@ -11,13 +11,14 @@ const SendMessageBar = ({message, changeMessage, sendMessage}) => {
                 position: 'fixed',
                 bottom: 0,
                 right: 0,
-                left: 260, // Встановлюємо ліву позицію на 240px
+                left: 260,
                 bgcolor: 'background.paper',
                 p: 1,
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
                 gap: 1,
+                borderTop: '1px solid #ddd'
             }}
         >
             <TextField

@@ -2,33 +2,51 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import MyAvatar from "./MyAvatar";
-import {AppBar, Drawer} from "@mui/material";
+import {Drawer} from "@mui/material";
 import ChatService from "../../services/ChatService";
+import MyChats from "../common/account/MyChats";
+import CustomAppBar from "./CustomAppBar";
+import AccountService from "../../services/AccountService";
+import MyContacts from "../common/account/MyContacts";
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+import IconButton from "@mui/material/IconButton";
+import TabsMenu from "../common/TabsMenu";
+import AccountBox from "../common/account/AccountBox";
+import Cookies from "js-cookie";
 
 const drawerWidth = 260;
 
+const drawerStyles = {
+    width: drawerWidth,
+    flexShrink: 0,
+    '& .MuiDrawer-paper': {
+        width: drawerWidth,
+        boxSizing: 'border-box',
+    },
+};
+
 export default function SideBar({selectChatId}) {
     const [myChats, setMyChats] = useState([])
+    const [myContacts, setMyContacts] = useState()
+
+    const [tab, setTab] = useState("MENU")
 
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
-
+    const accountId = Cookies.get("id")
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await ChatService.getAllByUserId()
+                const [response1, response2] = await Promise.all([
+                    ChatService.getAllByUserId(),
+                    AccountService.getAllContacts(),
+                ]);
 
-                setMyChats(response);
+                setMyChats(response1);
+                setMyContacts(response2);
             } catch (error) {
                 setError(error);
             } finally {
@@ -39,6 +57,28 @@ export default function SideBar({selectChatId}) {
         getData();
     }, []);
 
+
+    let tabContent;
+    switch (tab) {
+        case "MENU":
+            tabContent = <TabsMenu selectTab={setTab}/>;
+            break;
+        case "CHATS":
+            tabContent = <MyChats chats={myChats} selectChatId={selectChatId} />;
+            break;
+        case "CONTACTS":
+            tabContent = <MyContacts contacts={myContacts} selectChatId={selectChatId}/>;
+            break;
+        case "MY_ACCOUNT":
+            tabContent = <AccountBox id={accountId}/>;
+            break;
+        case "ACCOUNT":
+            tabContent = <AccountBox id={accountId}/>;
+            break;
+        default:
+            tabContent = <div>Something went wrong</div>
+            break;
+    }
 
     if (loading) {
         return <div>Loading...</div>
@@ -51,47 +91,17 @@ export default function SideBar({selectChatId}) {
     return (
         <Box>
             <CssBaseline/>
-            <AppBar
-                position="fixed"
-                sx={{width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`}}
-            >
+            <CustomAppBar/>
+            <Drawer sx={drawerStyles} variant="permanent" anchor="left">
                 <Toolbar>
-                    <Typography variant="h6" noWrap component="div">
-                        Todo
-                    </Typography>
+                    <IconButton edge="start"
+                        onClick={() => setTab("MENU")}
+                    >
+                        <MenuRoundedIcon/>
+                    </IconButton>
                 </Toolbar>
-            </AppBar>
-            <Drawer
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: drawerWidth,
-                        boxSizing: 'border-box',
-                    },
-                }}
-                variant="permanent"
-                anchor="left"
-            >
-                <Toolbar/>
                 <Divider/>
-                <List>
-                    {myChats.map((chat) => (
-                        <ListItem key={chat.id} disablePadding>
-                            <ListItemButton onClick={() =>
-                            {
-                                selectChatId(chat.id)
-                                console.log("Selected", chat.id)
-                            }}
-                            >
-                                <ListItemIcon>
-                                    <MyAvatar name={"Chat" + " " + chat.id}/>
-                                </ListItemIcon>
-                                <ListItemText primary={"Chat"}/>
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
+                {tabContent}
             </Drawer>
         </Box>
     );
