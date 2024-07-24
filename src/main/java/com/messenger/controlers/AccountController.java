@@ -96,12 +96,16 @@ public class AccountController {
     @PreAuthorize("@accountSecurity.checkAccount(#auth, #id)")
     @GetMapping("/notInContactList/{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<AccountResponseSimple> findAccountsNotInContactList(
+    public AccountListResponseDTO findAccountsNotInContactList(
             @PathVariable Long accountId,
             @RequestParam int page,
             @RequestParam int size,
             Authentication auth) {
-        return accountService.findAccountsNotInContactList(accountId, page, size).stream()
-                .map(accountMapper::toResponseSimple).toList();
+        AccountListResponseDTO responseDTO = new AccountListResponseDTO();
+        Object[] objects = accountService.findAccountsNotInContactList(accountId, page, size);
+        responseDTO.setList(((List<Account>) objects[0]).stream()
+                .map(accountMapper::toResponseSimple).toList());
+        responseDTO.setPages((int) objects[1] - 1);
+        return responseDTO;
     }
 }
