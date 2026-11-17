@@ -1,10 +1,25 @@
 # Messenger
 
+Web messenger with real-time chats. Built by team **CoffeeProgrammers** for the All-Ukrainian Team Programming
+Tournament 2024, where the team took **2nd place**.
+
 ## Overview
 
-This project is simple messenger for 
-chatting with your friends, relatives and
-other peoples you know.
+A simple messenger for chatting with your friends, relatives and other people you know. Users sign up with email
+verification, add contacts, start chats and exchange messages in real time.
+
+## Team and my role
+
+Team: [Artem Moseichenko](https://github.com/dexipua) (team lead), [Vladyslav](https://github.com/Vladobrod),
+[Yaroslav Holobyn](https://github.com/Yaroslav-Holobyn), [Vadym Honcharuk](https://github.com/VadymHoncharuk).
+
+**Artem Moseichenko, team lead and full-stack developer** (about half of all commits):
+
+- Planned the project, designed the architecture and database schema, split the tasks and reviewed code.
+- Built security: Spring Security with JWT, sessions and email verification codes.
+- Set up real-time messaging with WebSocket (STOMP).
+- Wrote account, contact and chat REST controllers and services, and the Flyway migrations.
+- Built frontend pages for registration, login verification and accounts, and the auth/account services in React.
 
 ## Key Roles and Functionalities
 
@@ -18,11 +33,11 @@ messages in already exists chats
 
 ## Technologies Used
 
-- Java: 22
-- Spring Boot: 3.2.5
-- React: 18.0.0
-- MUI: library of React components
-- H2: database for our project
+- **Backend:** Java 22, Spring Boot 3.2 (Web, Data JPA, Security, Validation, WebSocket), JWT, JavaMail, MapStruct,
+  Lombok, Flyway
+- **Database:** H2
+- **Frontend:** React 18, MUI, axios, STOMP / SockJS
+- **Testing:** JUnit, Spring Boot Test, Instancio
 
 ## Installation Instructions
 
@@ -100,7 +115,9 @@ messages in already exists chats
 
 ---
 
-## Auth
+## Demo accounts
+
+Demo video: https://youtu.be/Kank-xE7LG0
 
 emails:
 - am@gmail.com
@@ -113,9 +130,4 @@ password:
 
 code for verification is 12 for this accounts
 
-youtube - https://youtu.be/Kank-xE7LG0
-
-## P.S.
-
-If a javax.mail.AuthenticationFailedException happened,
-most likely someone stole our email and changed the password
+Note: sending real verification emails needs your own SMTP credentials.
