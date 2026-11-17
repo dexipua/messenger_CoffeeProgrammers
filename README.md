@@ -18,7 +18,7 @@ Team: [Artem Moseichenko](https://github.com/dexipua) (team lead), [Vladyslav](h
 **Artem Moseichenko, team lead and full-stack developer** (about half of all commits):
 
 - Planned the project, designed the architecture and database schema, split the tasks and reviewed code.
-- Built security: Spring Security with JWT, sessions and email verification codes.
+- Built security with Spring Security, JWT and sessions; worked with Vladyslav on email verification.
 - Set up real-time messaging with WebSocket (STOMP).
 - Wrote account, contact and chat REST controllers and services, and the Flyway migrations.
 - Built frontend pages for registration, login verification and accounts, and the auth/account services in React.
