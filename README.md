@@ -1,5 +1,7 @@
 # Messenger
 
+[![CI](https://github.com/dexipua/messenger_CoffeeProgrammers/actions/workflows/ci.yml/badge.svg)](https://github.com/dexipua/messenger_CoffeeProgrammers/actions/workflows/ci.yml)
+
 Web messenger with real-time chats. Built by team **CoffeeProgrammers** for the All-Ukrainian Team Programming
 Tournament 2024, where the team took **2nd place**.
 
